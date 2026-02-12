@@ -1,3 +1,8 @@
+# Data files
+QVA_grid1_*.txt
+*.nc
+*.vtk
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
