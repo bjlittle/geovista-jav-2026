@@ -68,4 +68,6 @@ To interactively explore the Raikoke dataset simply:
 > python -i main.py
 ```
 
+Note that we require to execute `python` with the `-i` flag (inspect interactively) as we are using `pyvistaqt`.
+
 ![Raikoke](data/raikoke.png)
