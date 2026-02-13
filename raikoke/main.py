@@ -212,11 +212,16 @@ def callback_render(value) -> None:
                 p.plane_widgets.pop().Off()
 
         if show_clip:
+            xyz = np.asarray(frame.center)
+            norm = np.linalg.norm(xyz)
+
+
             p.add_mesh_clip_plane(
                 frame,
                 widget_color=color,
-                normal="z",
-                outline_opacity=0,
+                normal=-xyz / norm,
+                implicit=False,
+                outline_translation=True,
                 name="plume",
                 render=False,
                 reset_camera=False,
