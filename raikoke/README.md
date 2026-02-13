@@ -1,8 +1,8 @@
 # Journal of Applied Volcanology
 
-## Installation
+## Create: Conda Environment
 
-Use `conda` to download and install the package dependencies that we require:
+Use `conda` to download and install the package dependencies that we require within an isolated `conda` environment:
 
 ```bash
 > conda env create --file env.yml
@@ -36,7 +36,7 @@ To deactivate the `conda` environment, simply:
 > conda deactivate
 ```
 
-## QVA to NetCDF
+## Data: Convert QVA to NetCDF
 
 ⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
 
@@ -58,7 +58,7 @@ To streamline the rendering process, we unpack the tarball to multiple `QVA` fil
 
 This will create the `data/volcanic_ash_air_concentration.nc` file.
 
-## Raikoke
+## Play: Raikoke
 
 ⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
 
