@@ -215,7 +215,6 @@ def callback_render(value) -> None:
             xyz = np.asarray(frame.center)
             norm = np.linalg.norm(xyz)
 
-
             p.add_mesh_clip_plane(
                 frame,
                 widget_color=color,
@@ -235,7 +234,8 @@ def callback_render(value) -> None:
             opacity = None
             tcmap = cmap
             smooth_shading = False
-            tshow_edges = show_edges    
+            tshow_edges = show_edges
+            show_scalar_bar = False
 
             if p.plane_widgets:
                 p.plane_widgets.pop().Off()
@@ -249,7 +249,6 @@ def callback_render(value) -> None:
                     feature_angle=30,
                     non_manifold_smoothing=True
                 )
-                smooth_shading = False
 
             if show_isosurfaces:
                 opacity = "linear_r"
@@ -257,6 +256,8 @@ def callback_render(value) -> None:
                 smooth_shading = True
                 tshow_edges = False
                 frame = frame.cell_data_to_point_data().contour(isosurfaces, rng=isosurfaces_range)
+                p.remove_actor(actor_scalar)
+                show_scalar_bar = True
 
             p.add_mesh(
                 frame,
@@ -271,10 +272,11 @@ def callback_render(value) -> None:
                 annotations=annotations,
                 opacity=opacity,
                 smooth_shading=smooth_shading,
-                show_scalar_bar=False,
+                show_scalar_bar=show_scalar_bar,
             )
 
-            p.add_actor(actor_scalar)
+            if not show_isosurfaces:
+                p.add_actor(actor_scalar)
     
     reset_clip = False
     actor.SetText(3, unit.num2date(t.points[tstep]).strftime(fmt))
