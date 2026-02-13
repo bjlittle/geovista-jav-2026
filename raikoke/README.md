@@ -40,11 +40,10 @@ To deactivate the `conda` environment, simply:
 
 ⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
 
-The `NAME` model `QVA` files should be located in the `data` directory
-i.e., `QVA_grid1_*.txt`.
+The `NAME` model `QVA` tarball should be located in the `data` directory
+i.e., `QVA_grid1.tar.gz`.
 
-To streamline the rendering process, we convert the multiple `QVA` files into a
-single `NetCDF` file. We also:
+To streamline the rendering process, we unpack the tarball to multiple `QVA` files and then combine them into a single `NetCDF` file. We also:
 
 - ensure to convert SI Units to `mg/m3`
 - calculate the data range
@@ -52,9 +51,21 @@ single `NetCDF` file. We also:
 
 ```bash
 > cd data
-> python convert.py
+> python unpack.py
 > ls -l
 > cd ..
 ```
 
 This will create the `data/volcanic_ash_air_concentration.nc` file.
+
+## Raikoke
+
+⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
+
+To interactively explore the Raikoke dataset simply:
+
+```bash
+> python -i main.py
+```
+
+![Raikoke](data/raikoke.png)
