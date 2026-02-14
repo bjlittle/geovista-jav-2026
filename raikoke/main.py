@@ -243,8 +243,8 @@ def callback_render(value) -> None:
 
             if show_smooth:
                 frame = frame.clean(tolerance=1e-5).triangulate().extract_surface().smooth_taubin(
-                    n_iter=50,
-                    pass_band=0.02,
+                    n_iter=20,
+                    pass_band=0.1,
                     normalize_coordinates=True,
                     feature_angle=30,
                     non_manifold_smoothing=True
@@ -279,7 +279,7 @@ def callback_render(value) -> None:
                 p.add_actor(actor_scalar)
     
     reset_clip = False
-    actor.SetText(3, unit.num2date(t.points[tstep]).strftime(fmt))
+    actor.SetText(0, unit.num2date(t.points[tstep]).strftime(fmt))
 
 
 # sort the assets in date ascending date order
@@ -357,16 +357,17 @@ actor_scalar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
 geolocator = Nominatim(user_agent="geovista")
 location = geolocator.geocode("Raikoke", language="en")
 
-p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="red", point_size=10)
+p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="yellow", point_size=10)
 p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray")
-p.add_mesh(line(-180, [90, 0, -90]), color="orange", line_width=3)
 p.add_axes(color=color)
 
 p.add_text(location.address, position="upper_left", font_size=15, color=color, shadow=False)
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
-actor = p.add_text(text, position="upper_right", font_size=10, color=color, shadow=False)
+actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
+
+p.add_logo_widget("images/raikoke_inset.png", position=(0.93, 0.91), size=(0.08, 0.08))
 
 #
 # sliders
@@ -377,7 +378,7 @@ p.add_slider_widget(
     (0, n_tsteps-1),
     value=0,
     pointa=(0.55, 0.90),
-    pointb=(0.95, 0.90),
+    pointb=(0.90, 0.90),
     color=color,
     fmt="%.0f",
     style="modern",
@@ -392,7 +393,7 @@ actor_threshold = p.add_slider_widget(
     (0.2, 5),
     value=threshold,
     pointa=(0.55, 0.80),
-    pointb=(0.95, 0.80),
+    pointb=(0.90, 0.80),
     color=color,
     fmt="%.2f",
     style="modern",
@@ -406,7 +407,7 @@ actor_isosurfaces = p.add_slider_widget(
     callback_isosurfaces,
     (10, 3000),
     value=isosurfaces,
-    pointa=(0.05, 0.90),
+    pointa=(0.10, 0.90),
     pointb=(0.45, 0.90),
     color=color,
     fmt="%.0f",
@@ -423,7 +424,7 @@ actor_min = p.add_slider_widget(
     callback_min,
     isosurfaces_range,
     value=vmin,
-    pointa=(0.05, 0.80),
+    pointa=(0.10, 0.80),
     pointb=(0.45, 0.80),
     color=color,
     fmt="%.2f",
@@ -439,7 +440,7 @@ actor_max = p.add_slider_widget(
     callback_max,
     isosurfaces_range,
     value=vmax,
-    pointa=(0.05, 0.80),
+    pointa=(0.10, 0.80),
     pointb=(0.45, 0.80),
     color=color,
     fmt="%.2f",
