@@ -1,4 +1,4 @@
-# Raikoke Dataset
+# Raikoke
 
 ## Create Conda Environment
 
