@@ -1,4 +1,4 @@
-# Journal of Applied Volcanology
+# Raikoke Dataset
 
 ## Create Conda Environment
 
