@@ -58,7 +58,7 @@ To streamline the rendering process, we unpack the tarball to multiple `QVA` fil
 
 This will create the `data/volcanic_ash_air_concentration.nc` file.
 
-## Explore Raikoke
+## Explore Raikoke Dataset
 
 ⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
 
