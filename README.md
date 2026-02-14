@@ -1,8 +1,7 @@
 # geovista-jav-2026
 
-[Journal of Applied Volcanology](https://link.springer.com/journal/13617).
+Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disiplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
-Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disiplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection.
 
 ## Clone the Repository
 
@@ -14,6 +13,7 @@ If you wish to explore the Raikoke and Reykjanes datasets, then first use `git` 
 ```
 
 Then click either of the images below for further instructions.
+
 
 ## Raikoke
 
