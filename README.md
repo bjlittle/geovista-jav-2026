@@ -17,7 +17,7 @@ Then click either of the images below for further instructions.
 
 ## Raikoke
 
-[![Raikoke Isosurface](images/raikoke.png)](raikoke/README.md)
+[![Raikoke Isosurface](images/raikoke.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/raikoke/)
 
 
 ## Reykjanes
