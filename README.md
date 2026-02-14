@@ -15,12 +15,11 @@ If you wish to explore either of the **Raikoke** and **Reykjanes** datasets, the
 Now click either of the images below for further instructions.
 
 
-## Raikoke
+## Raikoke (Russia)
 
 [![Raikoke Isosurface](raikoke/images/raikoke.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/raikoke/)
 
 
-## Reykjanes
+## Reykjanes (Iceland)
 
 TBD
-
