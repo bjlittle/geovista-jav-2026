@@ -5,7 +5,7 @@ Submission to the [Data Visualization and Effective Communication in Volcanology
 
 ## Clone the Repository
 
-If you wish to explore the Raikoke and Reykjanes datasets, then first use `git` to download our repository from GitHub:
+If you wish to explore either of the **Raikoke** and **Reykjanes** datasets, then first download our repository from GitHub:
 
 ```bash
 > git clone https://github.com/bjlittle/geovista-jav-2026
