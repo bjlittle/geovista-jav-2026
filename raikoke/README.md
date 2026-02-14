@@ -1,6 +1,6 @@
 # Journal of Applied Volcanology
 
-## Create: Conda Environment
+## Create Conda Environment
 
 Use `conda` to download and install the package dependencies that we require within an isolated `conda` environment:
 
@@ -36,7 +36,7 @@ To deactivate the `conda` environment, simply:
 > conda deactivate
 ```
 
-## Data: Convert QVA to NetCDF
+## Convert QVA to NetCDF
 
 ⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
 
@@ -58,7 +58,7 @@ To streamline the rendering process, we unpack the tarball to multiple `QVA` fil
 
 This will create the `data/volcanic_ash_air_concentration.nc` file.
 
-## Play: Raikoke
+## Explore Raikoke
 
 ⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
 
@@ -68,6 +68,6 @@ To interactively explore the Raikoke dataset simply:
 > python -i main.py
 ```
 
-ℹ️ We require to execute `python` with the `-i` flag (inspect interactively) as we are using `pyvistaqt`.
+ℹ️ We require to execute `python` with the `-i` flag (inspect interactively) as we are rendering the scene with `pyvistaqt`.
 
 ![Raikoke](../images/raikoke.png)
