@@ -12,7 +12,7 @@ If you wish to explore either of the **Raikoke** and **Reykjanes** datasets, the
 > cd geovista-jav-2026
 ```
 
-Then click either of the images below for further instructions.
+Now click either of the images below for further instructions.
 
 
 ## Raikoke
