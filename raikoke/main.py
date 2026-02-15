@@ -26,6 +26,8 @@ show_smooth = False
 threshold = 0.2
 isosurfaces = 200
 isosurfaces_range = (0, 6)
+iterations = 20
+passband = 0.1
 
 
 def rgb(r, g, b):
@@ -71,42 +73,17 @@ def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
     return result
 
 
-def callback_clip(flag: bool) -> None:
-    global show_clip
-    global actor_checkbox_isosurface
-    global actor_isosurfaces
-    global actor_threshold
-    global actor_min
-    global actor_max
-
-    show_clip = bool(flag)
-
-    if show_clip:
-        actor_isosurfaces.GetRepresentation().SetVisibility(False)
-        actor_min.GetRepresentation().SetVisibility(False)
-        actor_max.GetRepresentation().SetVisibility(False)
-        actor_threshold.GetRepresentation().SetVisibility(False)
-    else:
-        state = bool(actor_checkbox_isosurface.GetRepresentation().GetState())
-        actor_isosurfaces.GetRepresentation().SetVisibility(state)
-        actor_min.GetRepresentation().SetVisibility(state)
-        actor_max.GetRepresentation().SetVisibility(state)
-        actor_threshold.GetRepresentation().SetVisibility(not state)
-
-    callback_render(None)
-
-
-def callback_edges(flag: bool) -> None:
-    global show_edges
-
-    show_edges = bool(flag)
-    callback_render(None)
-
-
 def callback_isosurfaces(value) -> None:
     global isosurfaces
 
     isosurfaces = int(f"{value:.0f}")
+    callback_render(None)
+
+
+def callback_iterations(value) -> None:
+    global iterations
+
+    iterations = int(f"{value:.0f}")
     callback_render(None)
 
 
@@ -138,10 +115,10 @@ def callback_min(min_value: float) -> None:
     callback_render(None)
 
 
-def callback_smooth(flag: bool) -> None:
-    global show_smooth
+def callback_passband(value) -> None:
+    global passband
 
-    show_smooth = bool(flag)
+    passband = float(f"{value:.2f}")
     callback_render(None)
 
 
@@ -152,19 +129,105 @@ def callback_threshold(value) -> None:
     callback_render(None)
 
 
-def checkbox_isosurfaces(flag: bool) -> None:
+def checkbox_clip(flag: bool) -> None:
+    global show_clip
     global show_isosurfaces
+    global show_smooth
+    global show_edges
+    global actor_checkbox_isosurface
     global actor_isosurfaces
     global actor_threshold
     global actor_min
     global actor_max
+    global actor_checkbox_smooth
+    global actor_iterations
+    global actor_passband
+    global actor_checkbox_edges
 
-    show_isosurfaces = bool(flag)
+    show_clip = bool(flag)
+
+    if show_clip:
+        actor_checkbox_isosurface.GetRepresentation().SetState(0)
+        actor_checkbox_smooth.GetRepresentation().SetState(0)
+        actor_checkbox_edges.GetRepresentation().SetState(1)
+
+        show_isosurfaces = False
+        show_smooth = False
+        show_edges = True
+
+        actor_isosurfaces.GetRepresentation().SetVisibility(False)
+        actor_min.GetRepresentation().SetVisibility(False)
+        actor_max.GetRepresentation().SetVisibility(False)
+        actor_threshold.GetRepresentation().SetVisibility(False)
+        actor_iterations.GetRepresentation().SetVisibility(False)
+        actor_passband.GetRepresentation().SetVisibility(False)
+    else:
+        actor_threshold.GetRepresentation().SetVisibility(True)
+
+    callback_render(None)
+
+
+def checkbox_edges(flag: bool) -> None:
+    global show_edges
+    global show_clip
+    global actor_checkbox_edges
+
+    if show_clip:
+        show_edges = True
+        actor_checkbox_edges.GetRepresentation().SetState(1)
+    else:
+        show_edges = bool(flag)
+
+    if not show_clip:
+        callback_render(None)
+
+
+def checkbox_isosurfaces(flag: bool) -> None:
+    global show_isosurfaces
+    global show_clip
+    global actor_isosurfaces
+    global actor_threshold
+    global actor_min
+    global actor_max
+    global actor_checkbox_isosurface
+
+    if show_clip:
+        show_isosurfaces = False
+        actor_checkbox_isosurface.GetRepresentation().SetState(0)
+        actor_threshold.GetRepresentation().SetVisibility(False)
+    else:
+        show_isosurfaces = bool(flag)
+
     actor_isosurfaces.GetRepresentation().SetVisibility(show_isosurfaces)
     actor_min.GetRepresentation().SetVisibility(show_isosurfaces)
     actor_max.GetRepresentation().SetVisibility(show_isosurfaces)
-    actor_threshold.GetRepresentation().SetVisibility(not show_isosurfaces)
-    callback_render(None)
+
+    if not show_clip:
+        actor_threshold.GetRepresentation().SetVisibility(not show_isosurfaces)
+        callback_render(None)
+
+
+def checkbox_smooth(flag: bool) -> None:
+    global show_smooth
+    global show_clip
+    global actor_iterations
+    global actor_passband
+    global actor_threshold
+    global actor_checkbox_smooth
+
+    if show_clip:
+        show_smooth = False
+        actor_checkbox_smooth.GetRepresentation().SetState(0)
+        actor_threshold.GetRepresentation().SetVisibility(False)
+    else:
+        show_smooth = bool(flag)
+
+    actor_iterations.GetRepresentation().SetVisibility(show_smooth)
+    actor_passband.GetRepresentation().SetVisibility(show_smooth)
+
+    if not show_clip:
+        actor_threshold.GetRepresentation().SetVisibility(not show_smooth)
+        callback_render(None)
 
 
 def callback_render(value) -> None:
@@ -190,6 +253,8 @@ def callback_render(value) -> None:
     global show_clip
     global reset_clip
     global actor_scalar
+    global iterations
+    global passband
 
     if value is None:
         value = tstep
@@ -201,7 +266,7 @@ def callback_render(value) -> None:
 
     frame = cache(mesh, data, tstep)
 
-    if not show_isosurfaces and threshold:
+    if not show_isosurfaces and not show_smooth and threshold:
         frame = frame.threshold(threshold)
 
     if frame.is_empty:
@@ -243,8 +308,8 @@ def callback_render(value) -> None:
 
             if show_smooth:
                 frame = frame.clean(tolerance=1e-5).triangulate().extract_surface().smooth_taubin(
-                    n_iter=20,
-                    pass_band=0.1,
+                    n_iter=iterations,
+                    pass_band=passband,
                     normalize_coordinates=True,
                     feature_angle=30,
                     non_manifold_smoothing=True
@@ -451,17 +516,50 @@ actor_max = p.add_slider_widget(
 )
 actor_max.GetRepresentation().SetVisibility(False)
 
+actor_iterations = p.add_slider_widget(
+    callback_iterations,
+    (5, 100),
+    value=iterations,
+    pointa=(0.55, 0.80),
+    pointb=(0.90, 0.80),
+    color=color,
+    fmt="%.0f",
+    style="modern",
+    slider_width=0.02,
+    tube_width=0.001,
+    title="Iterations",
+    title_height=0.02,
+)
+actor_iterations.GetRepresentation().SetVisibility(False)
+
+actor_passband = p.add_slider_widget(
+    callback_passband,
+    (0.01, 2),
+    value=passband,
+    pointa=(0.55, 0.70),
+    pointb=(0.90, 0.70),
+    color=color,
+    fmt="%.2f",
+    style="modern",
+    slider_width=0.02,
+    tube_width=0.001,
+    title="Passband",
+    title_height=0.02,
+)
+actor_passband.GetRepresentation().SetVisibility(False)
+
+
 #
 # checkboxes
 #
 
 size, pad = 25, 3
-x, y = 10, 100
+x, y = 10, 95
 offset = size * 0.2
 font_size = 10
 
-p.add_checkbox_button_widget(
-    callback_smooth,
+actor_checkbox_smooth = p.add_checkbox_button_widget(
+    checkbox_smooth,
     value=show_smooth,
     color_on="green",
     color_off="red",
@@ -494,8 +592,8 @@ p.add_text(
 
 y += size + pad
 
-p.add_checkbox_button_widget(
-    callback_edges,
+actor_checkbox_edges = p.add_checkbox_button_widget(
+    checkbox_edges,
     value=show_edges,
     color_on="green",
     color_off="red",
@@ -512,7 +610,7 @@ p.add_text(
 y += size + pad
 
 p.add_checkbox_button_widget(
-    callback_clip,
+    checkbox_clip,
     value=show_clip,
     color_on="green",
     color_off="red",
