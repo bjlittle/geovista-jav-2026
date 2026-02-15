@@ -38,7 +38,7 @@ To deactivate the `conda` environment, simply:
 
 ## Convert QVA to NetCDF
 
-⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
+⚠️ Please ensure that the `geovista-jav-2026` environment is activated.
 
 The `NAME` model `QVA` tarball should be located in the `data` directory
 i.e., `QVA_grid1.tar.gz`.
@@ -60,7 +60,7 @@ This will create the `data/volcanic_ash_air_concentration.nc` file.
 
 ## Explore Raikoke Dataset
 
-⚠️ Please ensure that the `geovista-jav-2026` environment is activated 👍
+⚠️ Please ensure that the `geovista-jav-2026` environment is activated.
 
 To interactively explore the Raikoke dataset simply:
 
