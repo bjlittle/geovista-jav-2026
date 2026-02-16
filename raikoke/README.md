@@ -8,7 +8,7 @@ Use `conda` to download and install the package dependencies that we require wit
 > conda env create --file env.yml
 ```
 
-This will create a `conda` environment called `geovista-jav-2026` (`J`ournal of `A`pplied `V`olcanology):
+This will create a `conda` environment called `geovista-jav-2026` (`jav` - `J`ournal of `A`pplied `V`olcanology):
 
 ```bash
 > conda env list
