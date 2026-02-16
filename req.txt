@@ -1,0 +1,22 @@
+rasterio >=1.4.3,<2
+pip >=25.1.1,<26
+python 3.13.*
+cartopy >=0.24.0,<0.26
+click >=8.2.1,<9
+click-default-group >=1.2.4,<2
+cmocean >=4.0.3,<5
+colorcet >=3.1.0,<4
+lazy_loader >=0.4.0,<0.5
+netcdf4 >=1.7.2,<2
+numpy >=2.2.6,<3
+platformdirs >=4.3.8,<5
+pooch >=1.8.2,<2
+pykdtree >=1.4.1,<2
+pyproj >=3.7.1,<4
+pyqt
+pyvista >=0.45.0,<0.47.0
+pyvistaqt
+iris
+geopy
+setuptools >=80.9.0,<81
+setuptools-scm >=8.3.1,<9
