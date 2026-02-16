@@ -40,10 +40,10 @@ iterations = 20
 passband = 0.1
 
 class GeocodeDummy:
-    def __init__(self,address,longitude,lattitude):
+    def __init__(self,address,longitude,latitude):
         self.address = address
         self.longtitude = longitude
-        self.lattitude = lattitude
+        self.latitude = latitude
 
 def rgb(r, g, b):
     return (r / 256, g / 256, b / 256, 1.0)
@@ -55,9 +55,10 @@ def rgba(r, g, b):
 
 def qva(vmin=0, vmax=13):
     N = 2560
-    mapping = np.linspace(vmin, vmax, N, dtype=int)
+    mapping = np.linspace(vmin, vmax, N, dtype=np.double)
     colors = np.empty((N, 4))
 
+    c00 = rgba(211,211,211)   # 0.0-0.2 mg/m3 (very low)
     c01 = rgba(160, 210, 255)   # 0.2-2.0 mg/m3 (low)
     c02 = rgba(255, 153, 0)     # 2.0-5.0 (medium)
     c03 = rgba(255, 40, 0)      # 5.0-10.0 (high)
@@ -67,6 +68,7 @@ def qva(vmin=0, vmax=13):
     colors[mapping < 10] = c03
     colors[mapping < 5] = c02
     colors[mapping < 2] = c01
+    colors[mapping < 0.2] = c00
 
     return ListedColormap(colors, N=N)
 
@@ -435,6 +437,8 @@ sargs = {
 }
 
 annotations = {
+    0.0 : "",
+    0.2: "0.2",
     # 1.0: "Low",
     2.0: "2.0",
     # 3.5: "Medium",
@@ -456,18 +460,21 @@ actor_plume = p.add_mesh(
 )
 p.view_poi()
 actor_scalar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
+
 try:
     geolocator = Nominatim(user_agent="geovista")
     location = geolocator.geocode("Raikoke", language="en")
     p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="yellow", point_size=10)
 except GeocoderUnavailable:
     print("Error: Geocoder Unavailable - possibly due to poor connection")
-    location = GeocodeDummy(address = "No address avilable (Geocode error)",lattitude=None,longitude=None)
+    location = GeocodeDummy(address = "No address avilable (Geocode error)",latitude=None,longitude=None)
+
 actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray")
 p.add_axes(color=color)
 
-p.add_text(location.address, position="upper_left", font_size=15, color=color, shadow=False)
+p.add_text(f"{location.latitude}, {location.longitude}:\n{location.address}", position="upper_left", font_size=15, color=color, shadow=False)
+#p.add_text(f"{location.longitude},{location.latitude}", position="upper_left", font_size=15, color=color, shadow=False)
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
 actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
