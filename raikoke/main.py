@@ -22,6 +22,7 @@ reset_clip = False
 show_clip = False
 show_edges = True
 show_isosurfaces = False
+show_opacity = False
 show_smooth = False
 threshold = 0.2
 isosurfaces = 200
@@ -205,6 +206,14 @@ def checkbox_isosurfaces(flag: bool) -> None:
     if not show_clip:
         actor_threshold.GetRepresentation().SetVisibility(not show_isosurfaces)
         callback_render(None)
+
+
+def checkbox_opacity(flag: bool) -> None:
+    global show_opacity
+    global actor_base
+
+    show_opacity = bool(flag)
+    actor_base.GetProperty().SetOpacity(0.5 if show_opacity else 1.0)
 
 
 def checkbox_smooth(flag: bool) -> None:
@@ -423,7 +432,7 @@ geolocator = Nominatim(user_agent="geovista")
 location = geolocator.geocode("Raikoke", language="en")
 
 p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="yellow", point_size=10)
-p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
+actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray")
 p.add_axes(color=color)
 
@@ -568,6 +577,23 @@ actor_checkbox_smooth = p.add_checkbox_button_widget(
 )
 p.add_text(
     "Smooth",
+    position=(x + size + offset, y),
+    font_size=font_size,
+    color=color,
+)
+
+y += size + pad
+
+actor_checkbox_opacity = p.add_checkbox_button_widget(
+    checkbox_opacity,
+    value=show_opacity,
+    color_on="green",
+    color_off="red",
+    size=size,
+    position=(x, y),
+)
+p.add_text(
+    "Opacity",
     position=(x + size + offset, y),
     font_size=font_size,
     color=color,
