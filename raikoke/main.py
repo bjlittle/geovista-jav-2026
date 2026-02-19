@@ -186,6 +186,7 @@ def checkbox_edges(flag: bool) -> None:
 def checkbox_isosurfaces(flag: bool) -> None:
     global show_isosurfaces
     global show_clip
+    global show_smooth
     global actor_isosurfaces
     global actor_threshold
     global actor_min
@@ -204,21 +205,32 @@ def checkbox_isosurfaces(flag: bool) -> None:
     actor_max.GetRepresentation().SetVisibility(show_isosurfaces)
 
     if not show_clip:
-        actor_threshold.GetRepresentation().SetVisibility(not show_isosurfaces)
+        state = not show_isosurfaces
+        if state and show_smooth:
+            state = False
+        actor_threshold.GetRepresentation().SetVisibility(state)
         callback_render(None)
 
 
 def checkbox_opacity(flag: bool) -> None:
     global show_opacity
     global actor_base
+    global p
 
     show_opacity = bool(flag)
-    actor_base.GetProperty().SetOpacity(0.5 if show_opacity else 1.0)
+
+    if show_opacity:
+        p.enable_depth_peeling()
+        actor_base.GetProperty().SetOpacity(0.5)
+    else:
+        p.disable_depth_peeling()
+        actor_base.GetProperty().SetOpacity(1.0)
 
 
 def checkbox_smooth(flag: bool) -> None:
     global show_smooth
     global show_clip
+    global show_isosurfaces
     global actor_iterations
     global actor_passband
     global actor_threshold
@@ -235,7 +247,10 @@ def checkbox_smooth(flag: bool) -> None:
     actor_passband.GetRepresentation().SetVisibility(show_smooth)
 
     if not show_clip:
-        actor_threshold.GetRepresentation().SetVisibility(not show_smooth)
+        state = not show_smooth
+        if state and show_isosurfaces:
+            state = False
+        actor_threshold.GetRepresentation().SetVisibility(state)
         callback_render(None)
 
 
