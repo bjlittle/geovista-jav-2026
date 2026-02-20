@@ -1,3 +1,15 @@
+<p align="center">
+  <a href="https://geovista.readthedocs.io/en/latest/">
+    <img src="https://raw.githubusercontent.com/bjlittle/geovista-media/2026.02.0/media/branding/title/geovista-title.svg"
+         alt="GeoVista"
+         style="width: 50%; height: 50%"></a>
+</p>
+
+<h3 align="center">
+  Cartographic rendering and mesh analytics powered by <a href="https://docs.pyvista.org/index.html">PyVista</a>
+</h3>
+
+
 # geovista-jav-2026
 
 <p align="center">🚧 Under construction 🚧</p>
