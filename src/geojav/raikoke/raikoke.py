@@ -44,7 +44,7 @@ passband = 0.1
 class GeocodeDummy:
     def __init__(self,address,longitude,latitude):
         self.address = address
-        self.longtitude = longitude
+        self.longitude = longitude
         self.latitude = latitude
 
 def calculate_qva_index(data):
@@ -501,16 +501,17 @@ actor_scalar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
 try:
     geolocator = Nominatim(user_agent="geovista")
     location = geolocator.geocode("Raikoke", language="en")
-    p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="yellow", point_size=10)
 except GeocoderUnavailable:
     print("Error: Geocoder Unavailable - possibly due to poor connection")
-    location = GeocodeDummy(address = "No address avilable (Geocode error)",latitude=None,longitude=None)
+    location = GeocodeDummy(address = "No address avilable (Geocode error)",latitude=153.25,longitude=48.292)
+raikoke = GeocodeDummy(address=location.address, latitude=153.25, longitude=48.292)
 
+p.add_points(xs=raikoke.longitude, ys=raikoke.latitude, render_points_as_spheres=True, color="yellow", point_size=10)
 actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray")
 p.add_axes(color=color)
 
-p.add_text(f"{location.latitude}, {location.longitude}:\n{location.address}", position="upper_left", font_size=15, color=color, shadow=False)
+p.add_text(f"{raikoke.latitude}, {raikoke.longitude}:\n{raikoke.address}", position="upper_left", font_size=15, color=color, shadow=False)
 #p.add_text(f"{location.longitude},{location.latitude}", position="upper_left", font_size=15, color=color, shadow=False)
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
