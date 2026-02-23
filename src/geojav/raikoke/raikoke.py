@@ -30,6 +30,8 @@ BASE_DIR = Path(__file__).parent
 reset_clip = False
 show_clip = False
 show_edges = True
+color_by_qva_index = True
+active_scalar = "qva_index"
 show_isosurfaces = False
 show_opacity = False
 show_smooth = False
@@ -44,6 +46,29 @@ class GeocodeDummy:
         self.address = address
         self.longtitude = longitude
         self.latitude = latitude
+
+def calculate_qva_index(data):
+
+    data = np.where(data >= 10, 11, data)
+    data = np.where((data >= 5) & (data < 10), 7.5, data)
+    data = np.where((data >= 2) & (data < 5), 3.5, data)
+    data = np.where((data >= 0.2) & (data < 2), 1, data)
+    data = np.where(data < 0.2, 0, data)
+
+    return data
+
+def reset_time():
+    global tstep
+    tstep = 0
+    callback_render(None)
+    
+def time_evolve(pause):
+    global tstep
+    global n_tsteps
+    for i in range(n_tsteps):
+        sleep(pause)
+        tstep = i
+        callback_render(None)
 
 def rgb(r, g, b):
     return (r / 256, g / 256, b / 256, 1.0)
@@ -80,6 +105,8 @@ def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
     if not fname.exists():
         tdata = np.ma.masked_less_equal(data[tstep][:], 0).filled(np.nan).flatten()
         mesh["data"] = tdata
+        qva_index = calculate_qva_index(data[tstep][:]).flatten()
+        mesh["qva_index"] = qva_index
         to_wkt(mesh, WGS84)
         mesh.active_scalars_name = "data"
         tmp = mesh.threshold()
@@ -242,6 +269,11 @@ def checkbox_opacity(flag: bool) -> None:
         p.disable_depth_peeling()
         actor_base.GetProperty().SetOpacity(1.0)
 
+def toggle_active_scalar(flag: bool) -> None:
+    global active_scalar
+    active_scalar = "qva_index" if flag else "data"
+    print(f"Active scalar: {active_scalar}")
+    callback_render(None)
 
 def checkbox_smooth(flag: bool) -> None:
     global show_smooth
@@ -295,6 +327,7 @@ def callback_render(value) -> None:
     global actor_scalar
     global iterations
     global passband
+    global active_scalar
 
     if value is None:
         value = tstep
@@ -331,6 +364,7 @@ def callback_render(value) -> None:
                 reset_camera=False,
                 show_edges=True,
                 edge_color="gray",
+                scalars=active_scalar,
                 cmap=cmap,
                 clim=clim,
                 show_scalar_bar=False,
@@ -367,6 +401,7 @@ def callback_render(value) -> None:
             p.add_mesh(
                 frame,
                 name="plume",
+                scalars=active_scalar,
                 cmap=tcmap,
                 clim=clim,
                 render=False,
@@ -423,6 +458,7 @@ mesh = pv.StructuredGrid(xyz[:, 0].reshape(shape), xyz[:, 1].reshape(shape), xyz
 cmap = qva()
 color = "white"
 
+
 frame = cache(mesh, data, tstep)
 
 p = GeoBackgroundPlotter()
@@ -451,6 +487,7 @@ annotations = {
 actor_plume = p.add_mesh(
     frame,
     name="plume",
+    scalars=active_scalar,
     cmap=cmap,
     clim=clim,
     show_scalar_bar=False,
@@ -503,7 +540,7 @@ p.add_slider_widget(
 
 actor_threshold = p.add_slider_widget(
     callback_threshold,
-    (0.2, 5),
+    (0.2, 10),
     value=threshold,
     pointa=(0.55, 0.80),
     pointb=(0.90, 0.80),
@@ -684,6 +721,23 @@ p.add_checkbox_button_widget(
 )
 p.add_text(
     "Clip",
+    position=(x + size + offset, y),
+    font_size=font_size,
+    color=color,
+)
+
+y+= size + pad
+
+p.add_checkbox_button_widget(
+    toggle_active_scalar,
+    value=color_by_qva_index,
+    color_on="green",
+    color_off="red",
+    size=size,
+    position=(x, y),
+)
+p.add_text(
+    "Colour by QVA Index",
     position=(x + size + offset, y),
     font_size=font_size,
     color=color,
