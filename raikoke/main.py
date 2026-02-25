@@ -366,7 +366,7 @@ def callback_render(value) -> None:
 
             if not show_isosurfaces:
                 p.add_actor(actor_scalar)
-    
+
     reset_clip = False
     actor.SetText(0, unit.num2date(t.points[tstep]).strftime(fmt))
 

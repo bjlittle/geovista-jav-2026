@@ -21,6 +21,8 @@
 
 <p align="center">🚧 Under construction 🚧</p>
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bjlittle/geovista-jav-2026/main.svg)](https://results.pre-commit.ci/latest/github/bjlittle/geovista-jav-2026/main)
+
 Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disiplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
 
