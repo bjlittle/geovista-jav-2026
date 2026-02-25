@@ -1,0 +1,40 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+# See https://pre-commit.ci/#configuration
+
+ci:
+  autofix_prs: false
+  autofix_commit_msg: "style: pre-commit.ci auto-fixes"
+  autoupdate_commit_msg: "chore: update pre-commit hooks"
+  autoupdate_schedule: "weekly"
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v6.0.0"
+    hooks:
+      # Prevent giant files from being committed.
+    - id: check-added-large-files
+      args: [--maxkb=25000]
+      # Check for file name conflicts on case-insensitive file-systems.
+    - id: check-case-conflict
+      # Check for files that contain merge conflict strings.
+    - id: check-merge-conflict
+      # Check TOML file syntax.
+    - id: check-toml
+      # Check YAML file syntax.
+    - id: check-yaml
+      # Makes sure files end in a newline and only a newline
+    - id: end-of-file-fixer
+      # Replaces or checks mixed line ending
+    - id: mixed-line-ending
+      # Don't commit to main branch.
+    - id: no-commit-to-branch
+      # Trims trailing whitespace
+    - id: trailing-whitespace
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.36.2
+    hooks:
+      - id: check-dependabot
+      - id: check-github-actions
+      - id: check-github-workflows
