@@ -1,4 +1,5 @@
 # Data files
+cache/
 QVA_grid1_*.txt
 *.nc
 *.vtk
