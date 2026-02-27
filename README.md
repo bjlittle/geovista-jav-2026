@@ -40,7 +40,7 @@ Now click either of the images below for further instructions.
 
 ## Raikoke (Russia)
 
-[![Raikoke Isosurface](raikoke/images/raikoke.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/raikoke/README.md)
+[![Raikoke Isosurface](src/geojav/raikoke/images/raikoke.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/raikoke/README.md)
 
 
 ## Reykjanes (Iceland)
