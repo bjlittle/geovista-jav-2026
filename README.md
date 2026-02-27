@@ -21,7 +21,7 @@
 
 <p align="center">🚧 Under construction 🚧</p>
 
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bjlittle/geovista-jav-2026/main.svg)](https://results.pre-commit.ci/latest/github/bjlittle/geovista-jav-2026/main)
+[![GeoVista Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/bjlittle/geovista/main/docs/assets/badge/v0.json)](https://geovista.readthedocs.io/en/latest/) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bjlittle/geovista-jav-2026/main.svg)](https://results.pre-commit.ci/latest/github/bjlittle/geovista-jav-2026/main) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.prefix.dev)
 
 Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disiplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
