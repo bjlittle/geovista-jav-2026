@@ -1,3 +1,10 @@
+# Copyright (c) 2021, GeoVista Contributors.
+#
+# This file is part of GeoVista and is distributed under the 3-Clause BSD license.
+# See the LICENSE file in the package root directory for licensing details.
+
+from __future__ import annotations
+
 from geopy.geocoders import Nominatim
 import geovista
 from geovista.geodesic import line

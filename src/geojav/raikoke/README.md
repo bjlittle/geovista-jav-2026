@@ -65,7 +65,7 @@ This will create the `data/volcanic_ash_air_concentration.nc` file.
 To interactively explore the Raikoke dataset simply:
 
 ```bash
-> python -i main.py
+> python -i raikoke.py
 ```
 
 ℹ️ We require to execute `python` along with the `-i` flag (`inspect interactively`) as we are rendering the interactive scene with [pyvistaqt](https://github.com/pyvista/pyvistaqt).
