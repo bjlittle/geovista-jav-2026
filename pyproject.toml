@@ -1,0 +1,128 @@
+[build-system]
+# Defined by PEP 518
+requires = ["setuptools>=77.0.3", "setuptools_scm>=8"]
+# Defined by PEP 517
+build-backend = "setuptools.build_meta"
+
+
+[project]
+authors = [{ name = "GeoVista Contributors", email = "geovista.pub@gmail.com" }]
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Science/Research",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Atmospheric Science",
+  "Topic :: Scientific/Engineering :: Oceanography",
+  "Topic :: Scientific/Engineering :: Visualization",
+]
+description = "Cartographic rendering and mesh analytics powered by PyVista"
+dynamic = ["dependencies", "optional-dependencies", "readme", "version"]
+keywords = [
+  "cartography",
+  "curvilinear",
+  "earth-science",
+  "geovista",
+  "grid",
+  "mesh",
+  "python",
+  "pyvista",
+  "rectilinear",
+  "ugrid",
+  "unstructured",
+  "vtk",
+]
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+name = "geojav"
+requires-python = ">=3.12"
+
+
+[project.urls]
+Discussions = "https://github.com/bjlittle/geovista-jav-2026/discussions"
+Issues = "https://github.com/bjlittle/geovista-jav-2026/issues"
+Repository = "https://github.com/bjlittle/geovista-jav-2026"
+
+
+[tool.setuptools]
+zip-safe = false
+
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements/pypi-core.txt"] }
+readme = { file = "README.md", content-type = "text/markdown" }
+
+
+[tool.setuptools.dynamic.optional-dependencies]
+all = { file = ["requirements/pypi-optional-all.txt"] }
+devs = { file = ["requirements/pypi-optional-devs.txt"] }
+
+
+[tool.setuptools.packages.find]
+include = ["geojav*"]
+where = ["src"]
+
+
+[tool.setuptools_scm]
+local_scheme = "dirty-tag"
+version_scheme = "release-branch-semver"
+write_to = "src/geojav/_version.py"
+
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+
+[tool.pixi.environments]
+default = { features = ["py313"], solve-group = "default" }
+geojav = { features = ["devs", "py313"], solve-group = "default" }
+
+devs-py312 = { features = ["devs", "py312"], solve-group = "py312" }
+geojav-py312 = { features = ["devs", "py312"], solve-group = "py312" }
+py312 = { features = ["py312"], solve-group = "py312" }
+
+devs-py313 = { features = ["devs", "py313"], solve-group = "py313" }
+geojav-py313 = { features = ["devs", "py313"], solve-group = "py313" }
+py313 = { features = ["py313"], solve-group = "py313" }
+
+[tool.pixi.dependencies]
+cartopy = ">=0.24.0,<0.26"
+click = ">=8.2.1,<9"
+click-default-group = ">=1.2.4,<2"
+cmocean = ">=4.0.3,<5"
+colorcet = ">=3.1.0,<4"
+geopy = ">=2.4.0,<3"
+iris = ">=3.14.0,<4"
+lazy_loader = ">=0.4.0,<0.5"
+netcdf4 = ">=1.7.2,<2"
+numpy = ">=2.2.6,<3"
+platformdirs = ">=4.3.8,<5"
+pooch = ">=1.8.2,<2"
+pykdtree = ">=1.4.1,<2"
+pyproj = ">=3.7.1,<4"
+pyqt = ">=5.15.0,<6"
+pyvista = ">=0.47.0,<0.48.0"
+pyvistaqt = ">=0.11.0,<0.12.0"
+setuptools = ">=80.9.0,<81"
+setuptools-scm = ">=8.3.1,<9"
+
+[tool.pixi.feature.devs.dependencies]
+pre-commit = ">=4.2.0,<5"
+ruff = ">=0.12.0,<0.15"
+zizmor = ">=1.9.0,<2"
+
+[tool.pixi.feature.devs.pypi-dependencies]
+geojav = { path = ".", editable = true }
+geovista = { git = "https://github.com/bjlittle/geovista.git", branch = "main" }
+
+[tool.pixi.feature.py312.dependencies]
+pip = ">=25.1.1,<26"
+python = "3.12.*"
+
+[tool.pixi.feature.py313.dependencies]
+pip = ">=25.1.1,<26"
+python = "3.13.*"
