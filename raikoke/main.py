@@ -5,8 +5,6 @@
 
 """Execute script with 'python -i <script>'."""
 
-from __future__ import annotations
-
 from pathlib import Path
 
 from cf_units import Unit
