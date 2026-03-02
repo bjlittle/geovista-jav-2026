@@ -1,0 +1,44 @@
+# Reference:
+#   - https://github.com/actions/checkout
+
+name: ci-manifest
+
+on:
+  pull_request:
+
+  push:
+    branches:
+      - "main"
+      - "v*x"
+      - "!pixi-auto-update"
+      - "!pre-commit-ci-update-config"
+      - "!dependabot/*"
+    tags:
+      - "v*"
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  manifest:
+    name: "check-manifest"
+    runs-on: "ubuntu-latest"
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: "check-manifest"
+        run: |
+          pipx run check-manifest
