@@ -2,8 +2,8 @@
 _version.py
 
 # Data files
-cache/
 QVA_grid1_*.txt
+assets/
 *.nc
 *.vtk
 
