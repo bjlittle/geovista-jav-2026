@@ -1,0 +1,49 @@
+# Reference:
+#   - https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/keeping-your-actions-up-to-date-with-dependabot
+
+version: 2
+updates:
+
+  - package-ecosystem: "github-actions"
+    directories:
+      - "/"
+    open-pull-requests-limit: 3
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 7
+    groups:
+      gha:
+        patterns:
+          - "*"
+    labels:
+      - "new: pull-request"
+      - "bot"
+    commit-message:
+      prefix: "chore: "
+      include: "scope"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    open-pull-requests-limit: 3
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 7
+      semver-major-days: 7
+      semver-minor-days: 5
+      semver-patch-days: 3
+    ignore:
+      - dependency-name: "*"
+        # ignore patch updates
+        update-types: ["version-update:semver-patch"]
+    groups:
+      pip:
+        patterns:
+          - "*"
+    labels:
+      - "new: pull-request"
+      - "bot"
+    commit-message:
+      prefix: "chore: "
+      include: "scope"
