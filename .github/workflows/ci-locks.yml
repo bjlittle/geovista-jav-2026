@@ -1,0 +1,109 @@
+# Reference:
+#   - https://github.com/actions/checkout
+#   - https://github.com/actions/create-github-app-token
+#   - https://github.com/pavelzw/pixi-diff-to-markdown
+#   - https://github.com/peter-evans/create-pull-request
+#   - https://github.com/prefix-dev/setup-pixi
+
+name: ci-locks
+
+on:
+  schedule:
+    # every sunday @ 00h03
+    - cron: "3 0 * * 0"
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+env:
+  NAME: "geojav"
+  SHELLOPTS: "errexit:pipefail"
+  VERSION: "py313"
+
+permissions: {}
+
+jobs:
+  pixi-update:
+    name: "pixi update"
+    runs-on: "ubuntu-22.04"
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: "environment configure"
+        run: |
+          echo "ENV_NAME=${{ env.NAME }}-${{ env.VERSION }}" >> ${GITHUB_ENV}
+
+      - name: "setup pixi"
+        uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e
+        with:
+          run-install: false
+
+      - name: "refresh pixi manifest"
+        run: |
+          pixi update --json | pixi exec pixi-diff-to-markdown > diff.md
+          if [ $(wc -c < diff.md) -lt 10 ]; then
+            rm -f diff.md
+          fi
+
+      - name: "refresh lock and yml"
+        if: ${{ hashFiles('diff.md') }}
+        env:
+          ENV_NAME: ${{ env.ENV_NAME }}
+        run: |
+          pixi workspace export conda-explicit-spec --environment ${ENV_NAME} --frozen --ignore-pypi-errors requirements/locks
+          pixi workspace export conda-environment --environment ${ENV_NAME} requirements/geojav.yml
+
+      - name: "convert lock"
+        if: ${{ hashFiles('diff.md') }}
+        working-directory: requirements/locks
+        run: |
+          python lock2yaml.py ${{ env.VERSION }}
+
+      - name: "create pull-request"
+        id: cpr
+        if: ${{ hashFiles('diff.md') }}
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0
+        with:
+          token: ${{ secrets.GEOVISTA_BOT_TOKEN }}
+          add-paths: |
+            ${{ github.workspace }}/pixi.lock
+            ${{ github.workspace }}/requirements/geojav.yml
+            ${{ github.workspace }}/requirements/locks/*_conda_spec.txt
+            ${{ github.workspace }}/requirements/locks/*_conda_spec.yml
+          commit-message: "updated manifest and lockfiles"
+          branch: pixi-auto-update
+          base: main
+          delete-branch: true
+          title: "chore: pixi manifest update"
+          body-path: ${{ github.workspace }}/diff.md
+          labels: |
+            new: pull-request
+            bot
+            pixi
+
+      - name: "show pull-request"
+        if: ${{ hashFiles('diff.md') }}
+        env:
+          CPR_PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          CPR_PR_URL: ${{ steps.cpr.outputs.pull-request-url }}
+          CPR_PR_OPERATION: ${{ steps.cpr.outputs.pull-request-operation }}
+          CPR_PR_HEAD_SHA: ${{ steps.cpr.outputs.pull-request-head-sha }}
+        run: |
+          echo "### :rocket: Pull-Request Summary" >> ${GITHUB_STEP_SUMMARY}
+          echo "" >> ${GITHUB_STEP_SUMMARY}
+          echo "The following locks pull-request has been auto-generated:" >> ${GITHUB_STEP_SUMMARY}
+          echo "- **PR** #${CPR_PR_NUMBER}" >> ${GITHUB_STEP_SUMMARY}
+          echo "- **URL** ${CPR_PR_URL}" >> ${GITHUB_STEP_SUMMARY}
+          echo "- **Operation** [${CPR_PR_OPERATION}]" >> ${GITHUB_STEP_SUMMARY}
+          echo "- **SHA** ${CPR_PR_HEAD_SHA}" >> ${GITHUB_STEP_SUMMARY}

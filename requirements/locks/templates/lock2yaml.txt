@@ -1,0 +1,10 @@
+name: {{ name }}
+
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+{%- for line in file if not (line.startswith("#") or line.startswith("@")) %}
+  - {{ line|trim }}
+{%- endfor %}
