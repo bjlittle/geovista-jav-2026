@@ -444,15 +444,19 @@ tstep = 0
 y_cb = y.contiguous_bounds()
 x_cb = x.contiguous_bounds()
 z_cb = z.contiguous_bounds()
-z_fix = np.arange(*z_cb.shape) * np.mean(np.diff(y_cb)) * 3
 
-xx, yy, zz = np.meshgrid(x_cb, y_cb, z_fix, indexing="ij")
+#z_fix = np.arange(*z_cb.shape) * np.mean(np.diff(y_cb)) * 3
+Re = 6371 * 1000 * 3.281 #Earth radius in feet taking 1 m = 3.281 Ft
+zscale = np.mean(np.diff(y_cb))*(np.pi/180)/(np.mean(np.diff(z_cb))*100/Re) #mean latitude step (radians)/mean altitude step (feet) over Earth Radius
+z_h =(z_cb*100)/Re*zscale
+
+xx, yy, zz = np.meshgrid(x_cb, y_cb, z_h, indexing="ij")
 shape = xx.shape
 
 dmin, dmax = 0.0, 13
 clim = (dmin, dmax)
 
-xyz = to_cartesian(xx, yy, zlevel=zz, zscale=0.005)
+xyz = to_cartesian(xx, yy, zlevel=zz, zscale=1)
 mesh = pv.StructuredGrid(xyz[:, 0].reshape(shape), xyz[:, 1].reshape(shape), xyz[:, 2].reshape(shape))
 
 cmap = qva()
@@ -463,7 +467,7 @@ frame = cache(mesh, data, tstep)
 
 p = GeoBackgroundPlotter()
 p.set_background(color="black")
-
+#p.add_mesh(mesh)
 sargs = {
     "color": color,
     "title": f"{capitalise(cube.name())} ({str(cube.units)})",
@@ -506,12 +510,12 @@ except GeocoderUnavailable:
     location = GeocodeDummy(address = "No address avilable (Geocode error)",latitude=153.25,longitude=48.292)
 raikoke = GeocodeDummy(address=location.address, latitude=153.25, longitude=48.292)
 
-p.add_points(xs=raikoke.longitude, ys=raikoke.latitude, render_points_as_spheres=True, color="yellow", point_size=10)
+p.add_points(xs=raikoke.latitude, ys=raikoke.longitude, render_points_as_spheres=True, color="yellow", point_size=10)
 actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray")
 p.add_axes(color=color)
 
-p.add_text(f"{raikoke.latitude}, {raikoke.longitude}:\n{raikoke.address}", position="upper_left", font_size=15, color=color, shadow=False)
+p.add_text(f"{raikoke.latitude}, {raikoke.longitude}:\n{raikoke.address} \n Vertical Scale Factor: x{zscale:.2f}", position="upper_left", font_size=15, color=color, shadow=False)
 #p.add_text(f"{location.longitude},{location.latitude}", position="upper_left", font_size=15, color=color, shadow=False)
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
