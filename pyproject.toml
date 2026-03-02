@@ -47,6 +47,10 @@ Issues = "https://github.com/bjlittle/geovista-jav-2026/issues"
 Repository = "https://github.com/bjlittle/geovista-jav-2026"
 
 
+[tool.check-manifest]
+ignore = ["src/geojav/_version.py"]
+
+
 [tool.setuptools]
 zip-safe = false
 
@@ -111,6 +115,7 @@ setuptools = ">=80.9.0,<81"
 setuptools-scm = ">=8.3.1,<9"
 
 [tool.pixi.feature.devs.dependencies]
+check-manifest = ">=0.51,<0.52"
 pre-commit = ">=4.2.0,<5"
 ruff = ">=0.12.0,<0.15"
 zizmor = ">=1.9.0,<2"
