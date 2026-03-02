@@ -1,0 +1,13 @@
+prune .github
+prune .pixi
+prune requirements
+recursive-include requirements *.txt
+recursive-include src *.md *.py *.png
+
+exclude .envrc
+include .git_archival.txt
+include .gitattributes
+exclude .gitignore
+exclude .pre-commit-config.yaml
+include src/geojav/cache/registry.txt
+exclude pixi.lock
