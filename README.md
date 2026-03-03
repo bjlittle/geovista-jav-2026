@@ -47,12 +47,12 @@ Now click either of the images below for further instructions.
 
 ## Raikoke (Russia)
 
-[![Raikoke Isosurface](src/geojav/raikoke/images/raikoke.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/raikoke/README.md)
+[![Raikoke](src/geojav/raikoke/images/raikoke.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/raikoke/README.md)
 
 
 ## Reykjanes (Iceland)
 
-TBD
+[![Reykjanes Isosurface](src/geojav/reykjanes/images/reykjanes.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/reykjanes/README.md)
 
 
 ## [#ShowYourStripes](https://showyourstripes.info/s/globe)
