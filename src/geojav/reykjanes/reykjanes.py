@@ -446,7 +446,7 @@ release_location = " ".join(cube.attributes["release_location"].split()[::-1])
 location = geolocator.geocode(release_location, language="en")
 
 p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="orange", point_size=10)
-actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
+actor_base = p.add_base_layer(texture=geovista.blue_marble(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray", zlevel=0)
 p.add_axes(color=color)
 
