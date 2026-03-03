@@ -296,7 +296,7 @@ def callback_render(value) -> None:
 
     frame = cache(mesh, data, tstep)
 
-    if not show_isosurfaces and not show_smooth and threshold:
+    if not show_isosurfaces and threshold:
         frame = frame.threshold(threshold)
 
     if frame.is_empty:
