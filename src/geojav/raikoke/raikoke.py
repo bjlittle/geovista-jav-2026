@@ -337,7 +337,7 @@ def callback_render(value) -> None:
                 p.remove_actor("plume")
 
             if show_smooth:
-                frame = frame.clean(tolerance=1e-5).triangulate().extract_surface().smooth_taubin(
+                frame = frame.clean(tolerance=1e-5).triangulate().extract_surface(algorithm=None).smooth_taubin(
                     n_iter=iterations,
                     pass_band=passband,
                     normalize_coordinates=True,
