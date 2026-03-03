@@ -26,6 +26,7 @@ from geopy.geocoders import Nominatim
 #
 reset_clip = False
 show_clip = False
+show_domain = False
 show_edges = True
 show_isosurfaces = False
 show_opacity = False
@@ -149,6 +150,13 @@ def checkbox_clip(flag: bool) -> None:
     callback_render(None)
 
 
+def checkbox_domain(flag: bool) -> None:
+    global show_domain
+
+    show_domain = bool(flag)
+    callback_render(None)
+
+
 def checkbox_edges(flag: bool) -> None:
     global show_edges
     global show_clip
@@ -259,6 +267,10 @@ def callback_render(value) -> None:
     global actor_scalar
     global iterations
     global passband
+    global actor_domain
+    global domain
+    global show_domain
+
 
     if value is None:
         value = tstep
@@ -272,6 +284,15 @@ def callback_render(value) -> None:
 
     if not show_isosurfaces and threshold:
         frame = frame.threshold(threshold)
+
+    if show_domain:
+        if actor_domain is None:
+            actor_domain = p.add_mesh(domain, color="orange", line_width=1, render=False, reset_camera=False)
+        else:
+            actor_domain.SetVisibility(True)
+    else:
+        if actor_domain is not None:
+            actor_domain.SetVisibility(False)
 
     if frame.is_empty:
         p.remove_actor("plume")
@@ -387,7 +408,7 @@ clim = (dmin, dmax)
 xyz = to_cartesian(xx, yy, zlevel=zz, zscale=0.005)
 mesh = pv.StructuredGrid(xyz[:, 0].reshape(shape), xyz[:, 1].reshape(shape), xyz[:, 2].reshape(shape))
 
-outline = mesh.extract_feature_edges()
+domain = mesh.extract_feature_edges()
 
 cmap = "magma_r"
 color = "white"
@@ -418,8 +439,7 @@ actor_plume = p.add_mesh(
 p.view_poi()
 actor_scalar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
 
-
-# p.add_mesh(outline, color="orange", line_width=1)
+actor_domain = None
 
 geolocator = Nominatim(user_agent="geovista")
 release_location = " ".join(cube.attributes["release_location"].split()[::-1])
@@ -427,7 +447,7 @@ location = geolocator.geocode(release_location, language="en")
 
 p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="orange", point_size=10)
 actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
-p.add_coastlines(color="lightgray")
+p.add_coastlines(color="lightgray", zlevel=0)
 p.add_axes(color=color)
 
 p.add_text(location.address, position="upper_left", font_size=15, color=color, shadow=False)
@@ -437,7 +457,7 @@ actor = p.add_text(text, position="lower_left", font_size=15, color=color, shado
 
 p.add_logo_widget("images/reykjanes_inset.png", position=(0.93, 0.91), size=(0.08, 0.08))
 
-p.add_graticule()
+# p.add_graticule()
 
 #
 # sliders
@@ -624,6 +644,23 @@ actor_checkbox_edges = p.add_checkbox_button_widget(
 )
 p.add_text(
     "Edges",
+    position=(x + size + offset, y),
+    font_size=font_size,
+    color=color,
+)
+
+y += size + pad
+
+p.add_checkbox_button_widget(
+    checkbox_domain,
+    value=show_domain,
+    color_on="green",
+    color_off="red",
+    size=size,
+    position=(x, y),
+)
+p.add_text(
+    "Domain",
     position=(x + size + offset, y),
     font_size=font_size,
     color=color,
