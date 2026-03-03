@@ -21,7 +21,14 @@
 
 <p align="center">🚧 Under construction 🚧</p>
 
-[![GeoVista Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/bjlittle/geovista/main/docs/assets/badge/v0.json)](https://geovista.readthedocs.io/en/latest/) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bjlittle/geovista-jav-2026/main.svg)](https://results.pre-commit.ci/latest/github/bjlittle/geovista-jav-2026/main) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.prefix.dev)
+|              |   |
+|--------------|---|
+| ⚙️ CI         | [![ci-locks](https://github.com/bjlittle/geovista-jav-2026/actions/workflows/ci-locks.yml/badge.svg)](https://github.com/bjlittle/geovista-jav-2026/actions/workflows/ci-locks.yml) [![ci-manifest](https://github.com/bjlittle/geovista-jav-2026/actions/workflows/ci-manifest.yml/badge.svg)](https://github.com/bjlittle/geovista-jav-2026/actions/workflows/ci-manifest.yml) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bjlittle/geovista-jav-2026/main.svg)](https://results.pre-commit.ci/latest/github/bjlittle/geovista-jav-2026/main)  |
+| 💬 Community  | [![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-2.1-4baaaa.svg)](https://github.com/bjlittle/geovista-jav-2026/blob/main/CODE_OF_CONDUCT.md) [![GH Discussions](https://img.shields.io/badge/github-discussions%20%F0%9F%92%AC-yellow?logo=github&logoColor=lightgrey)](https://github.com/bjlittle/geovista-jav-2026/discussions) |
+| ✨ Meta       | [![GeoVista Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/bjlittle/geovista/main/docs/assets/badge/v0.json)](https://geovista.readthedocs.io/en/latest/) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.prefix.dev) [![license - bsd-3-clause](https://img.shields.io/github/license/bjlittle/geovista-jav-2026)](https://github.com/bjlittle/geovista-jav-2026/blob/main/LICENSE) |
+| 🧰 Repo       | [![commits-since](https://img.shields.io/github/commits-since/bjlittle/geovista-jav-2026/latest.svg)](https://github.com/bjlittle/geovista-jav-2026/commits/main) [![contributors](https://img.shields.io/github/contributors/bjlittle/geovista-jav-2026)](https://github.com/bjlittle/geovista-jav-2026/graphs/contributors) [![release](https://img.shields.io/github/v/release/bjlittle/geovista-jav-2026)](https://github.com/bjlittle/geovista-jav-2026/releases) |
+|              |   |
+
 
 Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disiplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
