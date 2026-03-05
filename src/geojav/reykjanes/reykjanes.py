@@ -34,9 +34,9 @@ show_opacity = False
 show_smooth = False
 threshold = 0.0
 isosurfaces = 200
-isosurfaces_range = (0, 4000)
 iterations = 20
 passband = 0.1
+log_scale = True
 
 
 def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
@@ -53,7 +53,9 @@ def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
         result = tmp
     else:
         result = pv.read(fname)
-    # print(result["data"].min(), result["data"].max())
+
+    print(f"min={result['data'].min():,.02f}, max={result['data'].max():,.02f}")
+
     return result
 
 
@@ -75,7 +77,9 @@ def callback_max(max_value) -> None:
     global isosurfaces_range
     global actor_min
 
+    max_value = int(f"{max_value:.0f}")
     min_value = isosurfaces_range[0]
+
     if max_value < min_value:
         # force the movement of the minimum value
         min_value = max_value
@@ -89,7 +93,9 @@ def callback_min(min_value: float) -> None:
     global isosurfaces_range
     global actor_max
 
+    min_value = int(f"{min_value:.0f}")
     max_value = isosurfaces_range[1]
+
     if min_value > max_value:
         # force the movement of the maximum value
         max_value = min_value
@@ -131,13 +137,13 @@ def checkbox_clip(flag: bool) -> None:
     show_clip = bool(flag)
 
     if show_clip:
-        actor_checkbox_isosurface.GetRepresentation().SetState(0)
-        actor_checkbox_smooth.GetRepresentation().SetState(0)
-        actor_checkbox_edges.GetRepresentation().SetState(1)
-
         show_isosurfaces = False
         show_smooth = False
-        show_edges = True
+        show_edges = False
+
+        actor_checkbox_isosurface.GetRepresentation().SetState(int(show_isosurfaces))
+        actor_checkbox_smooth.GetRepresentation().SetState(int(show_smooth))
+        actor_checkbox_edges.GetRepresentation().SetState(int(show_edges))
 
         actor_isosurfaces.GetRepresentation().SetVisibility(False)
         actor_min.GetRepresentation().SetVisibility(False)
@@ -146,6 +152,9 @@ def checkbox_clip(flag: bool) -> None:
         actor_iterations.GetRepresentation().SetVisibility(False)
         actor_passband.GetRepresentation().SetVisibility(False)
     else:
+        show_edges = True
+        actor_checkbox_edges.GetRepresentation().SetState(int(show_edges))
+
         actor_threshold.GetRepresentation().SetVisibility(True)
 
     callback_render(None)
@@ -164,8 +173,8 @@ def checkbox_edges(flag: bool) -> None:
     global actor_checkbox_edges
 
     if show_clip:
-        show_edges = True
-        actor_checkbox_edges.GetRepresentation().SetState(1)
+        show_edges = False
+        actor_checkbox_edges.GetRepresentation().SetState(int(show_edges))
     else:
         show_edges = bool(flag)
 
@@ -190,13 +199,20 @@ def checkbox_isosurfaces(flag: bool) -> None:
     global actor_min
     global actor_max
     global actor_checkbox_isosurface
+    global log_scale
+    global clim
+    global clim_isosurfaces
+    global clim_log_scale
 
     if show_clip:
         show_isosurfaces = False
-        actor_checkbox_isosurface.GetRepresentation().SetState(0)
-        actor_threshold.GetRepresentation().SetVisibility(False)
+        actor_checkbox_isosurface.GetRepresentation().SetState(int(show_isosurfaces))
+        actor_threshold.GetRepresentation().SetVisibility(show_isosurfaces)
     else:
         show_isosurfaces = bool(flag)
+
+    log_scale = not show_isosurfaces
+    clim = clim_log_scale if log_scale else clim_isosurfaces
 
     actor_isosurfaces.GetRepresentation().SetVisibility(show_isosurfaces)
     actor_min.GetRepresentation().SetVisibility(show_isosurfaces)
@@ -236,8 +252,8 @@ def checkbox_smooth(flag: bool) -> None:
 
     if show_clip:
         show_smooth = False
-        actor_checkbox_smooth.GetRepresentation().SetState(0)
-        actor_threshold.GetRepresentation().SetVisibility(False)
+        actor_checkbox_smooth.GetRepresentation().SetState(int(show_smooth))
+        actor_threshold.GetRepresentation().SetVisibility(show_smooth)
     else:
         show_smooth = bool(flag)
 
@@ -333,11 +349,12 @@ def callback_render(value) -> None:
                 name="plume",
                 render=False,
                 reset_camera=False,
-                show_edges=True,
+                show_edges=show_edges,
                 edge_color="gray",
                 cmap=cmap,
                 clim=clim,
                 show_scalar_bar=False,
+                log_scale=log_scale,
             )
         else:
             opacity = None
@@ -382,6 +399,7 @@ def callback_render(value) -> None:
                     opacity=opacity,
                     smooth_shading=smooth_shading,
                     show_scalar_bar=show_scalar_bar,
+                    log_scale=log_scale,
                 )
 
                 if not show_isosurfaces:
@@ -420,9 +438,11 @@ z_fix = np.arange(*z_cb.shape) * np.mean(np.diff(x_cb)) * 2
 xx, yy, zz = np.meshgrid(x_cb, y_cb, z_fix, indexing="ij")
 shape = xx.shape
 
-dmin, dmax = 0.0, 4027.0
-dmin, dmax = 0.0, 1065.0
-clim = (dmin, dmax)
+clim_isosurfaces = 0.0, 4027.0
+clim_log_scale = 1e-3, 5e4
+clim = clim_log_scale if log_scale else clim_isosurfaces
+
+isosurfaces_range = clim_isosurfaces
 
 xyz = to_cartesian(xx, yy, zlevel=zz, zscale=0.005)
 mesh = pv.StructuredGrid(xyz[:, 0].reshape(shape), xyz[:, 1].reshape(shape), xyz[:, 2].reshape(shape))
@@ -432,7 +452,6 @@ domain = mesh.extract_feature_edges()
 cmap = "magma_r"
 color = "white"
 
-
 frame = cache(mesh, data, tstep)
 
 p = GeoBackgroundPlotter()
@@ -441,8 +460,6 @@ p.set_background(color="black")
 sargs = {
     "color": color,
     "title": f"{capitalise(cube.name())} ({str(cube.units)})",
-    # "position_x": 0.45,
-    # "width": 0.55,
     "fmt": "%.1f",
 }
 
@@ -454,6 +471,7 @@ actor_plume = p.add_mesh(
     show_scalar_bar=False,
     show_edges=show_edges,
     edge_color="gray",
+    log_scale=log_scale,
 )
 p.view_poi()
 actor_scalar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
@@ -476,8 +494,6 @@ actor = p.add_text(text, position="lower_left", font_size=15, color=color, shado
 
 p.add_logo_widget("images/reykjanes_inset.png", position=(0.93, 0.91), size=(0.08, 0.08))
 
-# p.add_graticule()
-
 #
 # sliders
 #
@@ -499,12 +515,12 @@ p.add_slider_widget(
 
 actor_threshold = p.add_slider_widget(
     callback_threshold,
-    (0.0, 4000.0),
+    (0.0, 500.0),
     value=threshold,
     pointa=(0.55, 0.80),
     pointb=(0.90, 0.80),
     color=color,
-    fmt="%.2f",
+    fmt="%.1f",
     style="modern",
     slider_width=0.02,
     tube_width=0.001,
@@ -536,11 +552,11 @@ actor_min = p.add_slider_widget(
     pointa=(0.10, 0.80),
     pointb=(0.45, 0.80),
     color=color,
-    fmt="%.2f",
+    fmt="%.0f",
     style="modern",
     slider_width=0.02,
     tube_width=0.001,
-    title=f"Isosurface Thresholds ({str(cube.units)})",
+    title=f"Isosurface Range ({str(cube.units)})",
     title_height=0.02,
 )
 actor_min.GetRepresentation().SetVisibility(False)
@@ -552,7 +568,7 @@ actor_max = p.add_slider_widget(
     pointa=(0.10, 0.80),
     pointb=(0.45, 0.80),
     color=color,
-    fmt="%.2f",
+    fmt="%.0f",
     style="modern",
     slider_width=0.02,
     tube_width=0.001,
