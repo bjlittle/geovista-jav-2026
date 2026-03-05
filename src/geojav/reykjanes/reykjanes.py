@@ -28,6 +28,7 @@ reset_clip = False
 show_clip = False
 show_domain = False
 show_edges = True
+show_graticule = False
 show_isosurfaces = False
 show_opacity = False
 show_smooth = False
@@ -172,6 +173,14 @@ def checkbox_edges(flag: bool) -> None:
         callback_render(None)
 
 
+def checkbox_graticule(flag: bool) -> None:
+    global show_graticule
+
+    show_graticule = bool(flag)
+
+    callback_render(None)
+
+
 def checkbox_isosurfaces(flag: bool) -> None:
     global show_isosurfaces
     global show_clip
@@ -270,6 +279,7 @@ def callback_render(value) -> None:
     global actor_domain
     global domain
     global show_domain
+    global show_graticule
 
 
     if value is None:
@@ -293,6 +303,15 @@ def callback_render(value) -> None:
     else:
         if actor_domain is not None:
             actor_domain.SetVisibility(False)
+
+    actors = [name for name in p.actors.keys() if name.startswith("meridian") or name.startswith("parallel")]
+
+    if show_graticule:
+        if not actors:
+            p.add_graticule(mesh_args={"zlevel": 0})
+    else:
+        if actors:
+            p.remove_actor(actors)
 
     if frame.is_empty:
         p.remove_actor("plume")
@@ -627,6 +646,23 @@ actor_checkbox_isosurface = p.add_checkbox_button_widget(
 )
 p.add_text(
     "Isosurfaces",
+    position=(x + size + offset, y),
+    font_size=font_size,
+    color=color,
+)
+
+y += size + pad
+
+actor_checkbox_edges = p.add_checkbox_button_widget(
+    checkbox_graticule,
+    value=show_graticule,
+    color_on="green",
+    color_off="red",
+    size=size,
+    position=(x, y),
+)
+p.add_text(
+    "Graticule",
     position=(x + size + offset, y),
     font_size=font_size,
     color=color,
