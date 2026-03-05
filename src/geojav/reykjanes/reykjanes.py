@@ -161,10 +161,9 @@ def checkbox_clip(flag: bool) -> None:
 
 
 def checkbox_domain(flag: bool) -> None:
-    global show_domain
+    global actor_domain
 
-    show_domain = bool(flag)
-    callback_render(None)
+    actor_domain.SetVisibility(bool(flag))
 
 
 def checkbox_edges(flag: bool) -> None:
@@ -183,11 +182,16 @@ def checkbox_edges(flag: bool) -> None:
 
 
 def checkbox_graticule(flag: bool) -> None:
-    global show_graticule
+    global p
 
-    show_graticule = bool(flag)
+    actors = [name for name in p.actors.keys() if name.startswith("meridian") or name.startswith("parallel")]
+    flag = bool(flag)
 
-    callback_render(None)
+    if flag and not actors:
+        p.add_graticule(mesh_args={"zlevel": 0, "reset_camera": False})
+
+    for actor in actors:
+        p.actors[actor].SetVisibility(flag)
 
 
 def checkbox_isosurfaces(flag: bool) -> None:
@@ -289,13 +293,9 @@ def callback_render(value) -> None:
     global show_smooth
     global show_clip
     global reset_clip
-    global actor_scalar
+    global actor_scalar_bar
     global iterations
     global passband
-    global actor_domain
-    global domain
-    global show_domain
-    global show_graticule
 
 
     if value is None:
@@ -310,24 +310,6 @@ def callback_render(value) -> None:
 
     if not show_isosurfaces and threshold:
         frame = frame.threshold(threshold)
-
-    if show_domain:
-        if actor_domain is None:
-            actor_domain = p.add_mesh(domain, color="orange", line_width=1, render=False, reset_camera=False)
-        else:
-            actor_domain.SetVisibility(True)
-    else:
-        if actor_domain is not None:
-            actor_domain.SetVisibility(False)
-
-    actors = [name for name in p.actors.keys() if name.startswith("meridian") or name.startswith("parallel")]
-
-    if show_graticule:
-        if not actors:
-            p.add_graticule(mesh_args={"zlevel": 0})
-    else:
-        if actors:
-            p.remove_actor(actors)
 
     if frame.is_empty:
         p.remove_actor("plume")
@@ -346,7 +328,7 @@ def callback_render(value) -> None:
                 normal=-xyz / norm,
                 implicit=False,
                 outline_translation=True,
-                name="plume",
+                name="plume_clip",
                 render=False,
                 reset_camera=False,
                 show_edges=show_edges,
@@ -356,6 +338,8 @@ def callback_render(value) -> None:
                 show_scalar_bar=False,
                 log_scale=log_scale,
             )
+
+            p.remove_actor("plume")
         else:
             opacity = None
             tcmap = cmap
@@ -365,7 +349,7 @@ def callback_render(value) -> None:
 
             if p.plane_widgets:
                 p.plane_widgets.pop().Off()
-                p.remove_actor("plume")
+                p.remove_actor("plume_clip")
 
             if show_smooth:
                 frame = frame.clean(tolerance=1e-5).triangulate().extract_surface(algorithm=None).smooth_taubin(
@@ -382,7 +366,7 @@ def callback_render(value) -> None:
                 smooth_shading = True
                 tshow_edges = False
                 frame = frame.cell_data_to_point_data().contour(isosurfaces, rng=isosurfaces_range)
-                p.remove_actor(actor_scalar)
+                p.remove_actor(actor_scalar_bar)
                 show_scalar_bar = True
 
             if frame.n_cells:
@@ -403,7 +387,7 @@ def callback_render(value) -> None:
                 )
 
                 if not show_isosurfaces:
-                    p.add_actor(actor_scalar)
+                    p.add_actor(actor_scalar_bar)
             else:
                 p.remove_actor("plume")
 
@@ -474,17 +458,18 @@ actor_plume = p.add_mesh(
     log_scale=log_scale,
 )
 p.view_poi()
-actor_scalar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
+actor_scalar_bar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
 
-actor_domain = None
+actor_domain = p.add_mesh(domain, color="orange", line_width=1, render=False, reset_camera=False)
+actor_domain.SetVisibility(False)
 
 geolocator = Nominatim(user_agent="geovista")
 release_location = " ".join(cube.attributes["release_location"].split()[::-1])
 location = geolocator.geocode(release_location, language="en")
 
-p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="orange", point_size=10)
+p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="orange", point_size=10, reset_camera=False)
 actor_base = p.add_base_layer(texture=geovista.blue_marble(), zlevel=0, resolution="c192")
-p.add_coastlines(color="lightgray", zlevel=0)
+p.add_coastlines(color="lightgray", zlevel=0, reset_camera=False)
 p.add_axes(color=color)
 
 p.add_text(location.address, position="upper_left", font_size=15, color=color, shadow=False)
