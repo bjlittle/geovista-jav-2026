@@ -569,7 +569,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zizmor-1.22.0-hb17b654_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-ng-2.3.3-hceb46e0_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
-      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#8323f90dd4bfdc82f20f04790a59a4e1035ea101
+      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#bf31268d47815cbe0fd8b82ecb61a74b5837009e
       - pypi: ./
   devs-py313:
     channels:
@@ -864,7 +864,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zizmor-1.22.0-hb17b654_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-ng-2.3.3-hceb46e0_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
-      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#8323f90dd4bfdc82f20f04790a59a4e1035ea101
+      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#bf31268d47815cbe0fd8b82ecb61a74b5837009e
       - pypi: ./
   geojav:
     channels:
@@ -1159,7 +1159,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zizmor-1.22.0-hb17b654_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-ng-2.3.3-hceb46e0_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
-      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#8323f90dd4bfdc82f20f04790a59a4e1035ea101
+      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#bf31268d47815cbe0fd8b82ecb61a74b5837009e
       - pypi: ./
   geojav-py312:
     channels:
@@ -1456,7 +1456,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zizmor-1.22.0-hb17b654_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-ng-2.3.3-hceb46e0_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
-      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#8323f90dd4bfdc82f20f04790a59a4e1035ea101
+      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#bf31268d47815cbe0fd8b82ecb61a74b5837009e
       - pypi: ./
   geojav-py313:
     channels:
@@ -1751,7 +1751,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zizmor-1.22.0-hb17b654_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-ng-2.3.3-hceb46e0_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
-      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#8323f90dd4bfdc82f20f04790a59a4e1035ea101
+      - pypi: git+https://github.com/bjlittle/geovista.git?branch=main#bf31268d47815cbe0fd8b82ecb61a74b5837009e
       - pypi: ./
   py312:
     channels:
@@ -3224,7 +3224,7 @@ packages:
   timestamp: 1755865181359
 - pypi: ./
   name: geojav
-  version: 0.1.0.dev54
+  version: 0.1.0.dev64
   sha256: f28bad45f28c5e926b8da18c9a7d73a29bda7b9e794b3cc56b4ecb2252aa4555
   requires_dist:
   - cartopy>=0.22.0,<0.26
@@ -3272,9 +3272,9 @@ packages:
   purls: []
   size: 1974942
   timestamp: 1761593471198
-- pypi: git+https://github.com/bjlittle/geovista.git?branch=main#8323f90dd4bfdc82f20f04790a59a4e1035ea101
+- pypi: git+https://github.com/bjlittle/geovista.git?branch=main#bf31268d47815cbe0fd8b82ecb61a74b5837009e
   name: geovista
-  version: 0.6.0.dev871
+  version: 0.6.0.dev879
   requires_dist:
   - cartopy>=0.22.0,<0.26
   - click<8.4
@@ -3295,7 +3295,7 @@ packages:
   - zizmor>=1.9.0,<1.23 ; extra == 'devs'
   - ipykernel<7.3 ; extra == 'docs'
   - joblib<1.6 ; extra == 'docs'
-  - myst-nb<1.4 ; extra == 'docs'
+  - myst-nb<1.5 ; extra == 'docs'
   - numpydoc<1.11 ; extra == 'docs'
   - sphinx>=7.3.0,<9.2 ; extra == 'docs'
   - sphinx-design<0.8 ; extra == 'docs'
