@@ -14,3 +14,4 @@ pyproj >=3.3.0,<3.8
 PyQt5 <5.16
 pyvista >=0.47.0,<0.48
 pyvistaqt <0.12
+scitools-iris <3.15
