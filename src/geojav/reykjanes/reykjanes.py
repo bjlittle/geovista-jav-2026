@@ -21,6 +21,8 @@ import numpy as np
 import pyvista as pv
 from geopy.geocoders import Nominatim
 
+BASE_DIR = Path(__file__).parent
+
 #
 # callback state
 #
@@ -40,7 +42,7 @@ log_scale = True
 
 
 def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
-    tdir = Path("vtk")
+    tdir = BASE_DIR / "vtk"
     tdir.mkdir(exist_ok=True)
     fname = tdir / f"reykjanes_{tstep:03}.vtk"
     if not fname.exists():
@@ -396,7 +398,7 @@ def callback_render(value) -> None:
 
 
 # sort the assets in date ascending date order
-fname = "data/sulphur_dioxide_air_concentration.nc"
+fname = BASE_DIR / "data" / "sulphur_dioxide_air_concentration.nc"
 cube = iris.load_cube(fname)
 
 ds = nc.Dataset(fname)
@@ -477,7 +479,8 @@ p.add_text(location.address, position="upper_left", font_size=15, color=color, s
 text = unit.num2date(t.points[tstep]).strftime(fmt)
 actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
 
-p.add_logo_widget("images/reykjanes_inset.png", position=(0.93, 0.91), size=(0.08, 0.08))
+fname = BASE_DIR / "images" / "reykjanes_inset.png"
+p.add_logo_widget(fname, position=(0.93, 0.91), size=(0.08, 0.08))
 
 #
 # sliders
@@ -721,4 +724,3 @@ p.add_text(
 )
 
 p.show()
-# code.interact(local=locals())

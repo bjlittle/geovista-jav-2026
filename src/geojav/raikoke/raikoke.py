@@ -21,6 +21,8 @@ import pyvista as pv
 from geopy.geocoders import Nominatim
 from matplotlib.colors import ListedColormap
 
+BASE_DIR = Path(__file__).parent
+
 #
 # callback state
 #
@@ -64,7 +66,7 @@ def qva(vmin=0, vmax=13):
 
 
 def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
-    tdir = Path("vtk")
+    tdir = BASE_DIR / "vtk"
     tdir.mkdir(exist_ok=True)
     fname = tdir / f"raikoke_{tstep}.vtk"
     if not fname.exists():
@@ -378,7 +380,7 @@ def callback_render(value) -> None:
 
 
 # sort the assets in date ascending date order
-fname = "data/volcanic_ash_air_concentration.nc"
+fname = BASE_DIR / "data" / "volcanic_ash_air_concentration.nc"
 cube = iris.load_cube(fname)
 
 ds = nc.Dataset(fname)
@@ -462,7 +464,8 @@ p.add_text(location.address, position="upper_left", font_size=15, color=color, s
 text = unit.num2date(t.points[tstep]).strftime(fmt)
 actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
 
-p.add_logo_widget("images/raikoke_inset.png", position=(0.93, 0.91), size=(0.08, 0.08))
+fname = BASE_DIR / "images" / "raikoke_inset.png"
+p.add_logo_widget(fname, position=(0.93, 0.91), size=(0.08, 0.08))
 
 #
 # sliders
