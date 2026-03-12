@@ -30,7 +30,7 @@
 |              |   |
 
 
-Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disiplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
+Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disciplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
 
 ## Clone the Repository
