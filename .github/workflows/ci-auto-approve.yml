@@ -30,6 +30,8 @@ jobs:
     permissions:
       pull-requests: write
 
+    environment: development
+
     steps:
       - name: "verify"
         id: verify
