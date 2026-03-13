@@ -12,7 +12,7 @@ From the `geovista-jav-2026` base directory change to the `reykjanes` directory:
 ```
 
 
-## Combine NetCDF Time-Series
+## Unpack: Combine NetCDF Time-Series
 
 To streamline the rendering process, we download multiple `NetCDF` files
 and then combine them into a single time-series `NetCDF` file. We also:
@@ -31,7 +31,7 @@ and then combine them into a single time-series `NetCDF` file. We also:
 This will create the `data/sulphur_dioxide_air_concentration.nc` file.
 
 
-## Explore Reykjanes Dataset
+## Render: Explore Reykjanes Dataset
 
 To interactively explore the `reykjanes` dataset simply:
 

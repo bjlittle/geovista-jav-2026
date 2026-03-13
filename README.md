@@ -34,14 +34,14 @@ https://github.com/user-attachments/assets/7df2ee95-11db-4479-9cfe-a1a524aefa37
 Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disciplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
 
-# Installation
+# Install
 
 > [!NOTE]
 >
 > The `geojav` package is not (yet) installable from `PyPI` or a public `conda` channel e.g., `conda-forge`.
 
 
- Please complete the following `geojav` installation instructions.
+ Please follow these steps to install the `geojav` package.
 
 ## Clone the Repository
 
@@ -119,7 +119,7 @@ Simply:
 >
 
 
-# Render
+# Explore
 
 If you wish to interactvely explore either of the **Raikoke** and **Reykjanes** datasets, then please click either of the images below for further instructions.
 

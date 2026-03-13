@@ -12,7 +12,7 @@ From the `geovista-jav-2026` base directory change to the `raikoke` directory:
 ```
 
 
-## Convert QVA to NetCDF
+## Unpack: Convert QVA to NetCDF
 
 To streamline the rendering process, we download and unpack a tarball of multiple `QVA` files
 and then combine them into a single time-series `NetCDF` file. We also:
@@ -31,7 +31,7 @@ and then combine them into a single time-series `NetCDF` file. We also:
 This will create the `data/volcanic_ash_air_concentration.nc` file.
 
 
-## Explore Raikoke Dataset
+## Render: Explore Raikoke Dataset
 
 To interactively explore the `raikoke` dataset simply:
 
