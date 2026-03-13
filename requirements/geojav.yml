@@ -1,4 +1,4 @@
-name: geojav-py313
+name: geojav
 channels:
 - conda-forge
 - nodefaults
