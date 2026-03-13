@@ -29,6 +29,7 @@
 | 🧰 Repo       | [![commits-since](https://img.shields.io/github/commits-since/bjlittle/geovista-jav-2026/latest.svg)](https://github.com/bjlittle/geovista-jav-2026/commits/main) [![contributors](https://img.shields.io/github/contributors/bjlittle/geovista-jav-2026)](https://github.com/bjlittle/geovista-jav-2026/graphs/contributors) [![release](https://img.shields.io/github/v/release/bjlittle/geovista-jav-2026)](https://github.com/bjlittle/geovista-jav-2026/releases) |
 |              |   |
 
+https://github.com/user-attachments/assets/7df2ee95-11db-4479-9cfe-a1a524aefa37
 
 Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disciplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
