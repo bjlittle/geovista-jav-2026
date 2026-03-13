@@ -45,7 +45,7 @@ Submission to the [Data Visualization and Effective Communication in Volcanology
 
 ## Clone the Repository
 
-First make a local clone of the `geovista-jav-2026` repository:
+Make a local clone of the `geovista-jav-2026` repository:
 
 ```bash
 > git clone https://github.com/bjlittle/geovista-jav-2026
