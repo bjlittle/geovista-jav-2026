@@ -34,16 +34,94 @@ https://github.com/user-attachments/assets/7df2ee95-11db-4479-9cfe-a1a524aefa37
 Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disciplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
 
+# Installation
+
+> [!NOTE]
+>
+> The `geojav` package is not (yet) installable from `PyPI` or a public `conda` channel e.g., `conda-forge`.
+
+
+ Please complete the following `geojav` installation instructions.
+
 ## Clone the Repository
 
-If you wish to explore either of the **Raikoke** and **Reykjanes** datasets, then first download our repository from GitHub:
+First make a local clone of the `geovista-jav-2026` repository:
 
 ```bash
 > git clone https://github.com/bjlittle/geovista-jav-2026
 > cd geovista-jav-2026
 ```
 
-Now click either of the images below for further instructions.
+## Create the Environment
+
+Create an environment to install `geojav` and all its required dependencies.
+
+### `pixi`
+
+We recommend using [pixi](https://github.com/prefix-dev/pixi) for package management.
+
+Simply:
+
+```bash
+> pixi shell --environment geojav
+```
+
+Alternatively, install [direnv](https://direnv.net/) to *activate*/*deactivate*
+the `geojav` environment *automatically* whenever you enter/leave the `geovista-jav-2026`
+directory:
+
+```bash
+> pixi global install direnv
+> direnv allow
+```
+
+> [!TIP]
+> For information about the system, workspace and available `pixi` environments:
+>
+> ```bash
+> > pixi info
+> ```
+
+
+### `conda`
+
+Simply:
+
+```bash
+> conda env create --file requirements/geojav.yml
+> conda activate geojav
+```
+
+> [!TIP]
+> Alternatively, for `linux` users only, install the fully resolved `geojav` environment:
+>
+> ```bash
+> > conda env create --file requirements/locks/geojav_linux-64_conda_spec.yml
+> > conda activate geojav
+
+
+### `pip`
+
+Simply:
+
+```bash
+> pip install .
+> pip install git+https://github.com/bjlittle/geovista.git@main
+```
+
+> [!WARNING]
+> The PyPI package [scitools-iris](https://pypi.org/project/scitools-iris/) has a dependency on
+> [cf-units](https://pypi.org/project/cf-units/) which in turn requires the Unidata
+> [UDUNITS-2](https://docs.unidata.ucar.edu/udunits/current/) package (C based library) for units
+> of physical quantities to be available.
+>
+> The `UDUNITS-2` package is not `pip` installable.
+>
+
+
+# Render
+
+If you wish to interactvely explore either of the **Raikoke** and **Reykjanes** datasets, then please click either of the images below for further instructions.
 
 
 ## Raikoke (Russia)
@@ -56,7 +134,7 @@ Now click either of the images below for further instructions.
 [![Reykjanes Isosurface](src/geojav/reykjanes/images/reykjanes.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/reykjanes/README.md)
 
 
-## [#ShowYourStripes](https://showyourstripes.info/s/globe)
+# [#ShowYourStripes](https://showyourstripes.info/s/globe)
 
 <h4 align="center">
   <a href="https://showyourstripes.info/s/globe">
