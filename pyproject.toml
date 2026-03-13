@@ -124,6 +124,50 @@ zizmor = ">=1.9.0,<2"
 geojav = { path = ".", editable = true }
 geovista = { git = "https://github.com/bjlittle/geovista.git", branch = "main" }
 
+[tool.pixi.feature.devs.tasks.raikoke-clean]
+cmd = "rm -f *.nc *.txt"
+cwd = "src/geojav/raikoke/data"
+description = "Clean the Raikoke dataset directory"
+
+[tool.pixi.feature.devs.tasks.raikoke-unpack]
+cmd = "python unpack.py"
+cwd = "src/geojav/raikoke/data"
+description = "Download, unpack and preprocess the Raikoke dataset"
+
+[tool.pixi.feature.devs.tasks.raikoke-render]
+cmd = "python -i raikoke.py"
+cwd = "src/geojav/raikoke"
+description = "Render the Raikoke volcanic plume dataset"
+
+[tool.pixi.feature.devs.tasks.raikoke]
+depends-on = [
+  { "task" = "raikoke-unpack" },
+  { "task" = "raikoke-render" },
+]
+description = "Unpack and render the Raikoke volcanic plume dataset"
+
+[tool.pixi.feature.devs.tasks.reykjanes-clean]
+cmd = "rm -f *.nc"
+cwd = "src/geojav/reykjanes/data"
+description = "Clean the Reykjanes dataset directory"
+
+[tool.pixi.feature.devs.tasks.reykjanes-unpack]
+cmd = "python unpack.py"
+cwd = "src/geojav/reykjanes/data"
+description = "Download, unpack and preprocess the Reykjanes dataset"
+
+[tool.pixi.feature.devs.tasks.reykjanes-render]
+cmd = "python -i reykjanes.py"
+cwd = "src/geojav/reykjanes"
+description = "Render the Reykjanes volcanic plume dataset"
+
+[tool.pixi.feature.devs.tasks.reykjanes]
+depends-on = [
+  { "task" = "reykjanes-unpack" },
+  { "task" = "reykjanes-render" },
+]
+description = "Unpack and render the Reykjanes volcanic plume dataset"
+
 [tool.pixi.feature.py312.dependencies]
 pip = ">=25.1.1,<26"
 python = "3.12.*"
