@@ -5,6 +5,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 import tarfile
 
 import iris
@@ -14,6 +15,10 @@ from geojav import CACHE
 
 def main() -> None:
     iris.FUTURE.save_split_attrs = True
+
+    if Path("volcanic_ash_air_concentration.nc").exists():
+        print("\nRaikoke time-series NetCDF file already exists, skipping ...\n")
+        return
 
     print("\nFetching assets ...\n")
 

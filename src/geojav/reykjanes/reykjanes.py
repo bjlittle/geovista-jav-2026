@@ -434,6 +434,7 @@ xyz = to_cartesian(xx, yy, zlevel=zz, zscale=0.005)
 mesh = pv.StructuredGrid(xyz[:, 0].reshape(shape), xyz[:, 1].reshape(shape), xyz[:, 2].reshape(shape))
 
 domain = mesh.extract_feature_edges()
+to_wkt(domain, WGS84)
 
 cmap = "magma_r"
 color = "white"

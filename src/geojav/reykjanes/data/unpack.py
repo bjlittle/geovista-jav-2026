@@ -5,6 +5,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import iris
 
 from geojav import CACHE
@@ -13,6 +15,10 @@ from geojav import CACHE
 def main() -> None:
     iris.FUTURE.save_split_attrs = True
     iris.FUTURE.date_microseconds = True
+
+    if Path("sulphur_dioxide_air_concentration.nc").exists():
+        print("\nReykjanes time-series NetCDF file already exists, skipping ...\n")
+        return
 
     print("\nFetching assets ...\n")
 
