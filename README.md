@@ -36,11 +36,6 @@ Submission to the [Data Visualization and Effective Communication in Volcanology
 
 # Install
 
-> [!NOTE]
->
-> The `geojav` package is not (yet) installable from `PyPI` or a public `conda` channel e.g., `conda-forge`.
-
-
  Please follow these steps to install the `geojav` package.
 
 ## Clone the Repository
