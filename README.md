@@ -121,12 +121,22 @@ If you wish to interactvely explore either of the **Raikoke** and **Reykjanes** 
 
 ## Raikoke (Russia)
 
-[![Raikoke](src/geojav/raikoke/images/raikoke.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/raikoke/README.md)
+<p align="center">
+  <a href="https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/raikoke/README.md">
+    <img src="https://raw.githubusercontent.com/bjlittle/geovista-data-jav-2026/2026.03.3/assets/media/raikoke.png"
+         alt="Raikoke Plume"
+         style="width: 75%; height: 75%"></a>
+</p>
 
 
 ## Reykjanes (Iceland)
 
-[![Reykjanes Isosurface](src/geojav/reykjanes/images/reykjanes.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/reykjanes/README.md)
+<p align="center">
+  <a href="https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/reykjanes/README.md">
+    <img src="https://raw.githubusercontent.com/bjlittle/geovista-data-jav-2026/2026.03.3/assets/media/reykjanes.png"
+         alt="Reykjanes Plume Isosurface"
+         style="width: 75%; height: 75%"></a>
+</p>
 
 
 # [#ShowYourStripes](https://showyourstripes.info/s/globe)
