@@ -1,5 +1,12 @@
 # Raikoke (Russia)
 
+<p align="center">
+  <a href="https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/raikoke/README.md">
+    <img src="https://raw.githubusercontent.com/bjlittle/geovista-data-jav-2026/2026.03.3/assets/media/raikoke.png"
+         alt="Raikoke Plume"
+         style="width: 75%; height: 75%"></a>
+</p>
+
 > [!NOTE]
 > Please ensure that the `geojav` environment is activated.
 
@@ -42,4 +49,11 @@ To interactively explore the `raikoke` dataset simply:
 > [!IMPORTANT]
 > We require to execute `python` along with the `-i` flag (`inspect interactively`) as we are using [pyvistaqt](https://github.com/pyvista/pyvistaqt) to render the scene.
 
-[![Raikoke](images/raikoke.png)](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/raikoke/README.md)
+
+## Quick Start
+
+Alternatively, to download, unpack, preprocess and render the Raikoke dataset, simply:
+
+```bash
+> pixi run --frozen raikoke
+```
