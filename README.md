@@ -33,6 +33,9 @@
 
 Submission to the [Data Visualization and Effective Communication in Volcanology: Cross-disciplinary Lessons from Research and Practice](https://link.springer.com/collections/cgaadbacjg) collection in the [Journal of Applied Volcanology](https://link.springer.com/journal/13617).
 
+> [!NOTE]
+> The `geojav` package does not contain production grade code. It is a proof-of-concept tool to help the paper authors easily explore the plume time-series datasets and collectively decide on the final static renders for submission.
+
 
 # Install
 
