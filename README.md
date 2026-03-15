@@ -128,6 +128,13 @@ If you wish to interactvely explore either of the **Raikoke** and **Reykjanes** 
          style="width: 75%; height: 75%"></a>
 </p>
 
+### Quick Start
+
+To download, unpack, preprocess and render the Raikoke dataset, simply:
+
+```bash
+> pixi run --frozen raikoke
+```
 
 ## Reykjanes (Iceland)
 
@@ -137,6 +144,14 @@ If you wish to interactvely explore either of the **Raikoke** and **Reykjanes** 
          alt="Reykjanes Plume Isosurface"
          style="width: 75%; height: 75%"></a>
 </p>
+
+### Quick Start
+
+To download, unpack, preprocess and render the Reykjanes dataset, simply:
+
+```bash
+> pixi run --frozen reykjanes
+```
 
 
 # [#ShowYourStripes](https://showyourstripes.info/s/globe)
