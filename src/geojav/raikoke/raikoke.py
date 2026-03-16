@@ -21,7 +21,6 @@ import pyvista as pv
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderUnavailable
 from matplotlib.colors import ListedColormap
-from geopy.exc import GeocoderUnavailable
 
 BASE_DIR = Path(__file__).parent
 
@@ -59,19 +58,6 @@ def calculate_qva_index(data):
 
     return data
 
-def reset_time():
-    global tstep
-    tstep = 0
-    callback_render(None)
-    
-def time_evolve(pause):
-    global tstep
-    global n_tsteps
-    for i in range(n_tsteps):
-        sleep(pause)
-        tstep = i
-        callback_render(None)
-
 def rgb(r, g, b):
     return (r / 256, g / 256, b / 256, 1.0)
 
@@ -82,7 +68,6 @@ def rgba(r, g, b):
 
 def qva(vmin=0, vmax=13):
     N = 2560
-    mapping = np.linspace(vmin, vmax, N, dtype=np.double)
     mapping = np.linspace(vmin, vmax, N, dtype=np.double)
     colors = np.empty((N, 4))
 
@@ -469,7 +454,7 @@ color = "white"
 frame = cache(mesh, data, tstep)
 
 p = GeoBackgroundPlotter()
-p.set_background(color="white")
+p.set_background(color="black")
 #p.add_mesh(mesh)
 sargs = {
     "color": color,
@@ -514,8 +499,8 @@ except GeocoderUnavailable:
 raikoke = GeocodeDummy(address=location.address, latitude=153.25, longitude=48.292)
 
 p.add_points(xs=raikoke.latitude, ys=raikoke.longitude, render_points_as_spheres=True, color="yellow", point_size=10)
-#actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
-#p.add_coastlines(color="lightgray")
+actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
+p.add_coastlines(color="lightgray")
 p.add_axes(color=color)
 
 p.add_text(f"Latitude: {raikoke.latitude}" + r'$\degree$'+ f", Longitude: {raikoke.longitude}" + r'$\degree$'+f"\n{raikoke.address} \n Vertical Scale Factor: x{zscale:.2f}", position="upper_left", font_size=15, color=color, shadow=False)
