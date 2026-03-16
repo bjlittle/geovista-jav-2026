@@ -78,7 +78,7 @@ write_to = "src/geojav/_version.py"
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
-platforms = ["linux-64", "osx-64"]
+platforms = ["linux-64", "osx-64", "win-64"]
 
 
 [tool.pixi.environments]
