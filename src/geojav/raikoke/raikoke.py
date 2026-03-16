@@ -20,6 +20,7 @@ import numpy as np
 import pyvista as pv
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderUnavailable
+from geopy.exc import GeocoderUnavailable
 from matplotlib.colors import ListedColormap
 from geopy.exc import GeocoderUnavailable
 
@@ -41,7 +42,6 @@ isosurfaces = 200
 isosurfaces_range = (0, 6)
 iterations = 20
 passband = 0.1
-
 
 class GeocodeDummy:
     def __init__(self,address,longitude,latitude):
@@ -72,6 +72,53 @@ def time_evolve(pause):
         tstep = i
         callback_render(None)
 
+class GeocodeDummy:
+    def __init__(self,address,longitude,latitude):
+        self.address = address
+        self.longitude = longitude
+        self.latitude = latitude
+
+def calculate_qva_index(data):
+
+    data = np.where(data >= 10, 11, data)
+    data = np.where((data >= 5) & (data < 10), 7.5, data)
+    data = np.where((data >= 2) & (data < 5), 3.5, data)
+    data = np.where((data >= 0.2) & (data < 2), 1, data)
+    data = np.where(data < 0.2, 0, data)
+
+    return data
+
+def reset_time():
+    global tstep
+    tstep = 0
+    callback_render(None)
+    
+def time_evolve(pause):
+    global tstep
+    global n_tsteps
+    for i in range(n_tsteps):
+        sleep(pause)
+        tstep = i
+        callback_render(None)
+class GeocodeDummy:
+    def __init__(self,address,longitude,latitude):
+        self.address = address
+        self.longtitude = longitude
+        self.latitude = latitude
+
+def reset_time():
+    global tstep
+    tstep = 0
+    callback_render(None)
+    
+def time_evolve(pause):
+    global tstep
+    global n_tsteps
+    for i in range(n_tsteps):
+        sleep(pause)
+        tstep = i
+        callback_render(None)
+
 def rgb(r, g, b):
     return (r / 256, g / 256, b / 256, 1.0)
 
@@ -87,6 +134,7 @@ def qva(vmin=0, vmax=13):
     colors = np.empty((N, 4))
 
     c00 = rgba(211,211,211)   # 0.0-0.2 mg/m3 (very low)
+    c00 = rgba(211,211,211)   # 0.0-0.2 mg/m3 (very low)
     c01 = rgba(160, 210, 255)   # 0.2-2.0 mg/m3 (low)
     c02 = rgba(255, 153, 0)     # 2.0-5.0 (medium)
     c03 = rgba(255, 40, 0)      # 5.0-10.0 (high)
@@ -96,6 +144,7 @@ def qva(vmin=0, vmax=13):
     colors[mapping < 10] = c03
     colors[mapping < 5] = c02
     colors[mapping < 2] = c01
+    colors[mapping < 0.2] = c00
     colors[mapping < 0.2] = c00
 
     return ListedColormap(colors, N=N)
@@ -469,7 +518,7 @@ color = "white"
 frame = cache(mesh, data, tstep)
 
 p = GeoBackgroundPlotter()
-p.set_background(color="white")
+p.set_background(color="black")
 #p.add_mesh(mesh)
 sargs = {
     "color": color,
@@ -514,11 +563,11 @@ except GeocoderUnavailable:
 raikoke = GeocodeDummy(address=location.address, latitude=153.25, longitude=48.292)
 
 p.add_points(xs=raikoke.latitude, ys=raikoke.longitude, render_points_as_spheres=True, color="yellow", point_size=10)
-#actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
-#p.add_coastlines(color="lightgray")
+actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
+p.add_coastlines(color="lightgray")
 p.add_axes(color=color)
 
-p.add_text(f"Latitude: {raikoke.latitude}" + r'$\degree$'+ f", Longitude: {raikoke.longitude}" + r'$\degree$'+f"\n{raikoke.address} \n Vertical Scale Factor: x{zscale:.2f}", position="upper_left", font_size=15, color=color, shadow=False)
+p.add_text(f"{raikoke.latitude}, {raikoke.longitude}:\n{raikoke.address} \n Vertical Scale Factor: x{zscale:.2f}", position="upper_left", font_size=15, color=color, shadow=False)
 #p.add_text(f"{location.longitude},{location.latitude}", position="upper_left", font_size=15, color=color, shadow=False)
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
