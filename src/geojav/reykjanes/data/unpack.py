@@ -34,7 +34,7 @@ def main() -> None:
     cube = iris.load_cube(CACHE.abspath / "reykjanes" / "*.nc", name)
     print(cube)
 
-    if cube.units != (target := "μg / m^3"):
+    if cube.units != (target := "μg/m^3"):
         print(f"\nConverting units {str(cube.units)!r} -> {target!r} ...")
         cube.convert_units(target)
 
