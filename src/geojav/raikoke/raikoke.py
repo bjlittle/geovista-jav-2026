@@ -285,7 +285,7 @@ def add_sphere_segment(fl,border=False,wireframe=False):
         sphere = sphere.extract_all_edges()
 
     p.add_mesh(sphere, name=f"z={zlevel}", color="red", opacity=0.5)
-    
+
 def checkbox_smooth(flag: bool) -> None:
     global show_smooth
     global show_clip
@@ -529,7 +529,7 @@ fname = BASE_DIR / "images" / "raikoke_inset.png"
 p.add_logo_widget(fname, position=(0.00, 0.91), size=(0.08, 0.08))
 p.add_text(f"Raikoke: {raikoke.latitude}" + r'$\degree$N'+ f" {raikoke.longitude}" + r'$\degree$E', position=(0.08,0.96),viewport=True, font_size=15, color=color, shadow=False)
 p.add_text(f"{raikoke.address[9:]} \nVertical Scale Factor: x{zscale:.2f}", position=(0.08,0.91),viewport=True, font_size=10, color=color, shadow=False)
-           
+
 text = unit.num2date(t.points[tstep]).strftime(fmt)
 actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
 
