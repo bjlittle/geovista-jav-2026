@@ -24,6 +24,7 @@ from matplotlib.colors import ListedColormap
 
 BASE_DIR = Path(__file__).parent
 
+Re = 6371 * 1000 * 3.281 #Earth radius in feet taking 1 m = 3.281 Ft
 #
 # callback state
 #
@@ -263,6 +264,28 @@ def toggle_active_scalar(flag: bool) -> None:
     print(f"Active scalar: {active_scalar}")
     callback_render(None)
 
+def add_sphere_segment(fl,border=False,wireframe=False):
+    global p, Re, zscale, frame
+    center = (0,0,0)
+    zlevel = fl*100/Re
+    radius = 1 + zlevel*zscale
+
+    #sphere segment from 150E to 165E and 45N to 55N
+    #pyvista sphere plots from 0->180 phi, phi = 90-latitude
+    lon_min = 150
+    lat_min = 90-45
+    lon_max = 165
+    lat_max = 90-55
+    sphere = pv.Sphere(radius=radius, center=center,start_phi=lat_min,end_phi=lat_max,start_theta=lon_min,end_theta=lon_max,theta_resolution=30, phi_resolution=30)
+
+    if border:
+        edges = pv.DataSetFilters.extract_feature_edges(sphere)
+        p.add_mesh(edges, name=f"z={zlevel}_bnd", color="red")
+    if wireframe:
+        sphere = sphere.extract_all_edges()
+
+    p.add_mesh(sphere, name=f"z={zlevel}", color="red", opacity=0.5)
+    
 def checkbox_smooth(flag: bool) -> None:
     global show_smooth
     global show_clip
@@ -424,7 +447,7 @@ y = cube.coord("latitude")
 x = cube.coord("longitude")
 
 unit = Unit(t.units)
-fmt = "%Y-%m-%d %H:%M UTC%z"
+fmt = "%Y-%m-%d %H:%M UTC"
 
 n_tsteps = t.shape[0]
 tstep = 0
@@ -433,8 +456,6 @@ y_cb = y.contiguous_bounds()
 x_cb = x.contiguous_bounds()
 z_cb = z.contiguous_bounds()
 
-#z_fix = np.arange(*z_cb.shape) * np.mean(np.diff(y_cb)) * 3
-Re = 6371 * 1000 * 3.281 #Earth radius in feet taking 1 m = 3.281 Ft
 zscale = np.mean(np.diff(y_cb))*(np.pi/180)/(np.mean(np.diff(z_cb))*100/Re) #mean latitude step (radians)/mean altitude step (feet) over Earth Radius
 z_h =(z_cb*100)/Re*zscale
 
@@ -496,21 +517,23 @@ try:
 except GeocoderUnavailable:
     print("Error: Geocoder Unavailable - possibly due to poor connection")
     location = GeocodeDummy(address = "No address avilable (Geocode error)",latitude=153.25,longitude=48.292)
-raikoke = GeocodeDummy(address=location.address, latitude=153.25, longitude=48.292)
+raikoke = GeocodeDummy(address=location.address, latitude=48.292, longitude=153.25)
 
-p.add_points(xs=raikoke.latitude, ys=raikoke.longitude, render_points_as_spheres=True, color="yellow", point_size=10)
-actor_base = p.add_base_layer(texture=geovista.natural_earth_1(), zlevel=0, resolution="c192")
+p.add_points(xs=raikoke.longitude, ys=raikoke.latitude, render_points_as_spheres=True, color="yellow", point_size=10)
+actor_base = p.add_base_layer(texture=geovista.blue_marble(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray")
 p.add_axes(color=color)
 
-p.add_text(f"Latitude: {raikoke.latitude}" + r'$\degree$'+ f", Longitude: {raikoke.longitude}" + r'$\degree$'+f"\n{raikoke.address} \n Vertical Scale Factor: x{zscale:.2f}", position="upper_left", font_size=15, color=color, shadow=False)
-
-
+#Defining Raikoke Legend
+fname = BASE_DIR / "images" / "raikoke_inset.png"
+p.add_logo_widget(fname, position=(0.00, 0.91), size=(0.08, 0.08))
+p.add_text(f"Raikoke: {raikoke.latitude}" + r'$\degree$N'+ f" {raikoke.longitude}" + r'$\degree$E', position=(0.08,0.96),viewport=True, font_size=15, color=color, shadow=False)
+p.add_text(f"{raikoke.address[9:]} \nVertical Scale Factor: x{zscale:.2f}", position=(0.08,0.91),viewport=True, font_size=10, color=color, shadow=False)
+           
 text = unit.num2date(t.points[tstep]).strftime(fmt)
 actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
 
-fname = BASE_DIR / "images" / "raikoke_inset.png"
-p.add_logo_widget(fname, position=(0.93, 0.91), size=(0.08, 0.08))
+
 
 #
 # sliders
