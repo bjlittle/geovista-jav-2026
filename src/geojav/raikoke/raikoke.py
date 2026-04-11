@@ -25,6 +25,7 @@ from matplotlib.colors import ListedColormap
 BASE_DIR = Path(__file__).parent
 
 Re = 6371 * 1000 * 3.281 #Earth radius in feet taking 1 m = 3.281 Ft
+
 #
 # callback state
 #
@@ -36,55 +37,40 @@ show_opacity = False
 show_smooth = False
 threshold = 0.2
 isosurfaces = 200
-isosurfaces_range = (0, 6)
+isosurfaces_range = (0.0, 6.0)
 iterations = 20
 passband = 0.1
-color_by_qva_index = True
-active_scalar = "qva_index"
 
 
 class GeocodeDummy:
-    def __init__(self,address,longitude,latitude):
+    def __init__(self, address, longitude,latitude):
         self.address = address
         self.longitude = longitude
         self.latitude = latitude
-
-def calculate_qva_index(data):
-
-    data = np.where(data >= 10, 11, data)
-    data = np.where((data >= 5) & (data < 10), 7.5, data)
-    data = np.where((data >= 2) & (data < 5), 3.5, data)
-    data = np.where((data >= 0.2) & (data < 2), 1, data)
-    data = np.where(data < 0.2, 0, data)
-
-    return data
-
-def rgb(r, g, b):
-    return (r / 256, g / 256, b / 256, 1.0)
 
 
 def rgba(r, g, b):
     return np.array([r / 256, g / 256, b / 256, 1.0])
 
 
-def qva(vmin=0, vmax=13):
-    N = 2560
-    mapping = np.linspace(vmin, vmax, N, dtype=np.double)
-    colors = np.empty((N, 4))
+def qva(vmin=0.2, vmax=13.0):
+    step = 0.01
+    mapping = np.arange(vmin, vmax + step, step)
+    N = mapping.size
 
-    c00 = rgba(211,211,211)   # 0.0-0.2 mg/m3 (very low)
-    c01 = rgba(160, 210, 255)   # 0.2-2.0 mg/m3 (low)
-    c02 = rgba(255, 153, 0)     # 2.0-5.0 (medium)
-    c03 = rgba(255, 40, 0)      # 5.0-10.0 (high)
-    c04 = rgba(170, 0, 170)     # >=10.0 (very high)
+    colors = np.empty((N, 4), dtype=float)
+
+    c01 = rgba(160, 210, 255)   # [vmin,  2.0) - low
+    c02 = rgba(255, 153, 0)     # [2.0,   5.0) - medium
+    c03 = rgba(255, 40, 0)      # [5.0,  10.0) - high
+    c04 = rgba(170, 0, 170)     # [10.0, vmax] - very high
 
     colors[mapping >= 10] = c04
     colors[mapping < 10] = c03
     colors[mapping < 5] = c02
     colors[mapping < 2] = c01
-    colors[mapping < 0.2] = c00
 
-    return ListedColormap(colors, N=N)
+    return ListedColormap(colors, name="qva", N=N)
 
 
 def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
@@ -94,8 +80,6 @@ def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
     if not fname.exists():
         tdata = np.ma.masked_less_equal(data[tstep][:], 0).filled(np.nan).flatten()
         mesh["data"] = tdata
-        qva_index = calculate_qva_index(data[tstep][:]).flatten()
-        mesh["qva_index"] = qva_index
         to_wkt(mesh, WGS84)
         mesh.active_scalars_name = "data"
         tmp = mesh.threshold()
@@ -258,11 +242,6 @@ def checkbox_opacity(flag: bool) -> None:
         p.disable_depth_peeling()
         actor_base.GetProperty().SetOpacity(1.0)
 
-def toggle_active_scalar(flag: bool) -> None:
-    global active_scalar
-    active_scalar = "qva_index" if flag else "data"
-    print(f"Active scalar: {active_scalar}")
-    callback_render(None)
 
 def add_sphere_segment(fl,border=False,wireframe=False):
     global p, Re, zscale, frame
@@ -285,6 +264,7 @@ def add_sphere_segment(fl,border=False,wireframe=False):
         sphere = sphere.extract_all_edges()
 
     p.add_mesh(sphere, name=f"z={zlevel}", color="red", opacity=0.5)
+
 
 def checkbox_smooth(flag: bool) -> None:
     global show_smooth
@@ -338,7 +318,6 @@ def callback_render(value) -> None:
     global actor_scalar
     global iterations
     global passband
-    global active_scalar
 
     if value is None:
         value = tstep
@@ -376,7 +355,6 @@ def callback_render(value) -> None:
                 show_edges=True,
                 edge_color="gray",
                 cmap=cmap,
-                scalars=active_scalar,
                 clim=clim,
                 show_scalar_bar=False,
             )
@@ -413,7 +391,6 @@ def callback_render(value) -> None:
                 frame,
                 name="plume",
                 cmap=tcmap,
-                scalars=active_scalar,
                 clim=clim,
                 render=False,
                 reset_camera=False,
@@ -462,15 +439,14 @@ z_h =(z_cb*100)/Re*zscale
 xx, yy, zz = np.meshgrid(x_cb, y_cb, z_h, indexing="ij")
 shape = xx.shape
 
-dmin, dmax = 0.0, 13
+dmin, dmax = 0.2, 13.0
 clim = (dmin, dmax)
 
 xyz = to_cartesian(xx, yy, zlevel=zz, zscale=1)
 mesh = pv.StructuredGrid(xyz[:, 0].reshape(shape), xyz[:, 1].reshape(shape), xyz[:, 2].reshape(shape))
 
-cmap = qva()
+cmap = qva(*clim)
 color = "white"
-
 
 frame = cache(mesh, data, tstep)
 
@@ -486,7 +462,6 @@ sargs = {
 }
 
 annotations = {
-    0.0 : "",
     0.2: "0.2",
     # 1.0: "Low",
     2.0: "2.0",
@@ -500,13 +475,12 @@ annotations = {
 actor_plume = p.add_mesh(
     frame,
     name="plume",
-    scalars=active_scalar,
     cmap=cmap,
     clim=clim,
     show_scalar_bar=False,
     show_edges=show_edges,
     edge_color="gray",
-    annotations=annotations
+    annotations=annotations,
 )
 p.view_poi()
 actor_scalar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
@@ -516,24 +490,41 @@ try:
     location = geolocator.geocode("Raikoke", language="en")
 except GeocoderUnavailable:
     print("Error: Geocoder Unavailable - possibly due to poor connection")
-    location = GeocodeDummy(address = "No address avilable (Geocode error)",latitude=153.25,longitude=48.292)
+    location = GeocodeDummy(address = "No address avilable (Geocode error)", latitude=153.25, longitude=48.292)
+
 raikoke = GeocodeDummy(address=location.address, latitude=48.292, longitude=153.25)
 
-p.add_points(xs=raikoke.longitude, ys=raikoke.latitude, render_points_as_spheres=True, color="yellow", point_size=10)
+p.add_points(
+    xs=raikoke.longitude,
+    ys=raikoke.latitude,
+    render_points_as_spheres=True,
+    color="yellow",
+    point_size=10
+)
 actor_base = p.add_base_layer(texture=geovista.blue_marble(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray")
 p.add_axes(color=color)
 
-#Defining Raikoke Legend
+# Defining Raikoke Legend
 fname = BASE_DIR / "images" / "raikoke_inset.png"
 p.add_logo_widget(fname, position=(0.00, 0.91), size=(0.08, 0.08))
-p.add_text(f"Raikoke: {raikoke.latitude}" + r'$\degree$N'+ f" {raikoke.longitude}" + r'$\degree$E', position=(0.08,0.96),viewport=True, font_size=15, color=color, shadow=False)
-p.add_text(f"{raikoke.address[9:]} \nVertical Scale Factor: x{zscale:.2f}", position=(0.08,0.91),viewport=True, font_size=10, color=color, shadow=False)
+p.add_text(
+    f"Raikoke: {raikoke.latitude}" + r'$\degree$N' + f" {raikoke.longitude}" + r'$\degree$E',
+    position=(0.08,0.96),
+    viewport=True,
+    font_size=15,
+    color=color,
+)
+p.add_text(
+    f"{raikoke.address[9:]} \nVertical Scale Factor: x{zscale:.2f}",
+    position=(0.08,0.91),
+    viewport=True,
+    font_size=10,
+    color=color,
+)
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
 actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
-
-
 
 #
 # sliders
@@ -556,7 +547,7 @@ p.add_slider_widget(
 
 actor_threshold = p.add_slider_widget(
     callback_threshold,
-    (0.2, 5),
+    (0.2, 6.0),
     value=threshold,
     pointa=(0.55, 0.80),
     pointb=(0.90, 0.80),
@@ -649,7 +640,6 @@ actor_passband = p.add_slider_widget(
 )
 actor_passband.GetRepresentation().SetVisibility(False)
 
-
 #
 # checkboxes
 #
@@ -737,23 +727,6 @@ p.add_checkbox_button_widget(
 )
 p.add_text(
     "Clip",
-    position=(x + size + offset, y),
-    font_size=font_size,
-    color=color,
-)
-
-y+= size + pad
-
-p.add_checkbox_button_widget(
-    toggle_active_scalar,
-    value=color_by_qva_index,
-    color_on="green",
-    color_off="red",
-    size=size,
-    position=(x, y),
-)
-p.add_text(
-    "Colour by QVA Index",
     position=(x + size + offset, y),
     font_size=font_size,
     color=color,
