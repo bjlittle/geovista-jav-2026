@@ -24,7 +24,10 @@ from matplotlib.colors import ListedColormap
 
 BASE_DIR = Path(__file__).parent
 
-Re = 6371 * 1000 * 3.281 #Earth radius in feet taking 1 m = 3.281 Ft
+Re = 6371 * 1000 * 3.281 # Earth radius in feet taking 1 m = 3.281 Ft
+
+feet = Unit("feet")
+meter = Unit("meter")
 
 #
 # callback state
@@ -32,6 +35,7 @@ Re = 6371 * 1000 * 3.281 #Earth radius in feet taking 1 m = 3.281 Ft
 reset_clip = False
 show_clip = False
 show_edges = True
+show_flight = False
 show_isosurfaces = False
 show_opacity = False
 show_smooth = False
@@ -40,6 +44,7 @@ isosurfaces = 200
 isosurfaces_range = (min_threshold, 6.0)
 iterations = 20
 passband = 0.1
+flight_level = 0
 
 
 class GeocodeDummy:
@@ -80,6 +85,7 @@ def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
     if not fname.exists():
         tdata = np.ma.masked_less_equal(data[tstep][:], 0).filled(np.nan).flatten()
         mesh["data"] = tdata
+        mesh["idx"] = np.arange(mesh.n_cells)
         to_wkt(mesh, WGS84)
         mesh.active_scalars_name = "data"
         tmp = mesh.threshold()
@@ -101,6 +107,13 @@ def callback_iterations(value) -> None:
     global iterations
 
     iterations = int(f"{value:.0f}")
+    callback_render(None)
+
+
+def callback_flight(value) -> None:
+    global flight_level
+
+    flight_level = int(f"{value:.0f}") // 50
     callback_render(None)
 
 
@@ -151,6 +164,7 @@ def checkbox_clip(flag: bool) -> None:
     global show_isosurfaces
     global show_smooth
     global show_edges
+    global show_flight
     global actor_checkbox_isosurface
     global actor_isosurfaces
     global actor_threshold
@@ -160,6 +174,8 @@ def checkbox_clip(flag: bool) -> None:
     global actor_iterations
     global actor_passband
     global actor_checkbox_edges
+    global actor_checkbox_flight
+    global actor_flight
 
     show_clip = bool(flag)
 
@@ -167,10 +183,12 @@ def checkbox_clip(flag: bool) -> None:
         actor_checkbox_isosurface.GetRepresentation().SetState(0)
         actor_checkbox_smooth.GetRepresentation().SetState(0)
         actor_checkbox_edges.GetRepresentation().SetState(1)
+        actor_checkbox_flight.GetRepresentation().SetState(0)
 
         show_isosurfaces = False
         show_smooth = False
         show_edges = True
+        show_flight = False
 
         actor_isosurfaces.GetRepresentation().SetVisibility(False)
         actor_min.GetRepresentation().SetVisibility(False)
@@ -178,6 +196,7 @@ def checkbox_clip(flag: bool) -> None:
         actor_threshold.GetRepresentation().SetVisibility(False)
         actor_iterations.GetRepresentation().SetVisibility(False)
         actor_passband.GetRepresentation().SetVisibility(False)
+        actor_flight.GetRepresentation().SetVisibility(False)
     else:
         actor_threshold.GetRepresentation().SetVisibility(True)
 
@@ -199,15 +218,42 @@ def checkbox_edges(flag: bool) -> None:
         callback_render(None)
 
 
+def checkbox_flight(flag: bool) -> None:
+    global show_flight
+    global show_clip
+    global show_isosurfaces
+    global actor_checkbox_flight
+    global actor_flight
+    global actor_threshold
+
+    if show_clip or show_isosurfaces:
+        show_flight = False
+        actor_checkbox_flight.GetRepresentation().SetState(0)
+        actor_threshold.GetRepresentation().SetVisibility(False)
+    else:
+        show_flight = bool(flag)
+
+    actor_flight.GetRepresentation().SetVisibility(show_flight)
+
+    if not (show_clip or show_isosurfaces):
+        state = not show_flight
+        if state and show_isosurfaces:
+            state = False
+        actor_threshold.GetRepresentation().SetVisibility(state)
+        callback_render(None)
+
+
 def checkbox_isosurfaces(flag: bool) -> None:
     global show_isosurfaces
     global show_clip
     global show_smooth
+    global show_flight
     global actor_isosurfaces
     global actor_threshold
     global actor_min
     global actor_max
     global actor_checkbox_isosurface
+    global actor_checkbox_flight
 
     if show_clip:
         show_isosurfaces = False
@@ -225,6 +271,10 @@ def checkbox_isosurfaces(flag: bool) -> None:
         if state and show_smooth:
             state = False
         actor_threshold.GetRepresentation().SetVisibility(state)
+        if show_isosurfaces:
+            show_flight = False
+            actor_checkbox_flight.GetRepresentation().SetState(0)
+            actor_flight.GetRepresentation().SetVisibility(False)
         callback_render(None)
 
 
@@ -241,29 +291,6 @@ def checkbox_opacity(flag: bool) -> None:
     else:
         p.disable_depth_peeling()
         actor_base.GetProperty().SetOpacity(1.0)
-
-
-def add_sphere_segment(fl,border=False,wireframe=False):
-    global p, Re, zscale, frame
-    center = (0,0,0)
-    zlevel = fl*100/Re
-    radius = 1 + zlevel*zscale
-
-    #sphere segment from 150E to 165E and 45N to 55N
-    #pyvista sphere plots from 0->180 phi, phi = 90-latitude
-    lon_min = 150
-    lat_min = 90-45
-    lon_max = 165
-    lat_max = 90-55
-    sphere = pv.Sphere(radius=radius, center=center,start_phi=lat_min,end_phi=lat_max,start_theta=lon_min,end_theta=lon_max,theta_resolution=30, phi_resolution=30)
-
-    if border:
-        edges = pv.DataSetFilters.extract_feature_edges(sphere)
-        p.add_mesh(edges, name=f"z={zlevel}_bnd", color="red")
-    if wireframe:
-        sphere = sphere.extract_all_edges()
-
-    p.add_mesh(sphere, name=f"z={zlevel}", color="red", opacity=0.5)
 
 
 def checkbox_smooth(flag: bool) -> None:
@@ -319,6 +346,13 @@ def callback_render(value) -> None:
     global iterations
     global passband
     global min_threshold
+    global flight_level
+    global n_hcells
+    global title
+    global actor_title
+    global feet
+    global meter
+
 
     if value is None:
         value = tstep
@@ -346,6 +380,9 @@ def callback_render(value) -> None:
         if show_clip:
             xyz = np.asarray(frame.center)
             norm = np.linalg.norm(xyz)
+
+            p.remove_actor("flight")
+            p.SetInput(title)
 
             p.add_mesh_clip_plane(
                 frame,
@@ -390,6 +427,32 @@ def callback_render(value) -> None:
                 frame = frame.cell_data_to_point_data().contour(isosurfaces, rng=isosurfaces_range)
                 p.remove_actor(actor_scalar)
                 show_scalar_bar = True
+
+            if show_flight:
+                idx = frame["idx"]
+                mask = np.where((idx >= n_hcells*flight_level) & (idx < n_hcells*(flight_level+1)))[0]
+                if mask.size > 0:
+                    flight = frame.extract_cells(mask)
+                    p.add_mesh(
+                        flight,
+                        name="flight",
+                        color="white" if flight_level % 2 else "black",
+                        line_width=4,
+                        style="wireframe",
+                        render=False,
+                        reset_camera=False,
+                        render_lines_as_tubes=True,
+                    )
+                    lower = int(feet.convert(flight_level*50*100, meter))
+                    upper = int(feet.convert((flight_level+1)*50*100, meter))
+                    text = f"{title}\t\tAltitude: {lower:>6,} - {upper:>6,}m (AMSL)\t\tFlight Level: {flight_level*50:,} - {(flight_level+1)*50:,}"
+                    actor_title.SetInput(text)
+                else:
+                    p.remove_actor("flight")
+                    actor_title.SetInput(title)
+            else:
+                p.remove_actor("flight")
+                actor_title.SetInput(title)
 
             p.add_mesh(
                 frame,
@@ -436,6 +499,8 @@ tstep = 0
 y_cb = y.contiguous_bounds()
 x_cb = x.contiguous_bounds()
 z_cb = z.contiguous_bounds()
+
+n_hcells = (x_cb.size - 1) * (y_cb.size - 1)
 
 zscale = np.mean(np.diff(y_cb))*(np.pi/180)/(np.mean(np.diff(z_cb))*100/Re) #mean latitude step (radians)/mean altitude step (feet) over Earth Radius
 z_h =(z_cb*100)/Re*zscale
@@ -512,13 +577,16 @@ p.add_axes(color=color)
 # Defining Raikoke Legend
 fname = BASE_DIR / "images" / "raikoke_inset.png"
 p.add_logo_widget(fname, position=(0.00, 0.91), size=(0.08, 0.08))
-p.add_text(
-    f"Raikoke: {raikoke.latitude}" + r'$\degree$N' + f" {raikoke.longitude}" + r'$\degree$E',
+
+title = f"Raikoke: {raikoke.latitude}" + r'$\degree$N' + f" {raikoke.longitude}" + r'$\degree$E'
+actor_title = p.add_text(
+    title,
     position=(0.08,0.96),
     viewport=True,
     font_size=15,
     color=color,
 )
+
 p.add_text(
     f"{raikoke.address[9:]} \nVertical Scale Factor: x{zscale:.2f}",
     position=(0.08,0.91),
@@ -644,6 +712,22 @@ actor_passband = p.add_slider_widget(
 )
 actor_passband.GetRepresentation().SetVisibility(False)
 
+actor_flight = p.add_slider_widget(
+    callback_flight,
+    (z_cb[0], z_cb[-1]),
+    value=flight_level,
+    pointa=(0.10, 0.85),
+    pointb=(0.45, 0.85),
+    color=color,
+    fmt="%.0f",
+    style="modern",
+    slider_width=0.02,
+    tube_width=0.001,
+    title=r"Flight Level",
+    title_height=0.02,
+)
+actor_flight.GetRepresentation().SetVisibility(False)
+
 #
 # checkboxes
 #
@@ -697,6 +781,23 @@ actor_checkbox_isosurface = p.add_checkbox_button_widget(
 )
 p.add_text(
     "Isosurfaces",
+    position=(x + size + offset, y),
+    font_size=font_size,
+    color=color,
+)
+
+y += size + pad
+
+actor_checkbox_flight = p.add_checkbox_button_widget(
+    checkbox_flight,
+    value=show_flight,
+    color_on="green",
+    color_off="red",
+    size=size,
+    position=(x, y),
+)
+p.add_text(
+    "Flight Level",
     position=(x + size + offset, y),
     font_size=font_size,
     color=color,
