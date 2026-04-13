@@ -35,9 +35,9 @@ show_edges = True
 show_isosurfaces = False
 show_opacity = False
 show_smooth = False
-threshold = 0.2
+threshold = min_threshold = 0.2
 isosurfaces = 200
-isosurfaces_range = (0.0, 6.0)
+isosurfaces_range = (min_threshold, 6.0)
 iterations = 20
 passband = 0.1
 
@@ -318,6 +318,7 @@ def callback_render(value) -> None:
     global actor_scalar
     global iterations
     global passband
+    global min_threshold
 
     if value is None:
         value = tstep
@@ -329,7 +330,10 @@ def callback_render(value) -> None:
 
     frame = cache(mesh, data, tstep)
 
-    if not show_isosurfaces and threshold:
+    if show_isosurfaces:
+        if min_threshold:
+            frame = frame.threshold(min_threshold)
+    elif threshold:
         frame = frame.threshold(threshold)
 
     if frame.is_empty:
