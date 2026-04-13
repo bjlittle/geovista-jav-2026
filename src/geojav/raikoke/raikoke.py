@@ -407,7 +407,7 @@ def callback_render(value) -> None:
                 p.add_actor(actor_scalar)
 
     reset_clip = False
-    actor.SetText(0, unit.num2date(t.points[tstep]).strftime(fmt))
+    actor.SetText(3, unit.num2date(t.points[tstep]).strftime(fmt))
 
 
 # sort the assets in date ascending date order
@@ -524,7 +524,7 @@ p.add_text(
 )
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
-actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
+actor = p.add_text(text, position="upper_right", font_size=15, color=color, shadow=False)
 
 #
 # sliders
