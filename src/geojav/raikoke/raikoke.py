@@ -382,7 +382,7 @@ def callback_render(value) -> None:
             norm = np.linalg.norm(xyz)
 
             p.remove_actor("flight")
-            p.SetInput(title)
+            actor_title.SetInput(title)
 
             p.add_mesh_clip_plane(
                 frame,
