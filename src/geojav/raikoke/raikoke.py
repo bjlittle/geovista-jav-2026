@@ -5,11 +5,12 @@
 
 """Execute script with 'python -i <script>'."""
 
+from dataclasses import dataclass
 from pathlib import Path
 
 from cf_units import Unit
 import geovista
-from geovista.common import to_cartesian
+from geovista.common import to_cartesian, to_lonlat, wrap
 from geovista.pantry.data import capitalise
 from geovista.crs import to_wkt, WGS84
 from geovista.qt import GeoBackgroundPlotter
@@ -18,7 +19,9 @@ import iris
 import netCDF4 as nc
 import numpy as np
 import pyvista as pv
+from pyvista.plotting.picking import PICKED_REPRESENTATION_NAMES
 from geopy.geocoders import Nominatim
+from geopy.location import Location
 from geopy.exc import GeocoderUnavailable
 from matplotlib.colors import ListedColormap
 
@@ -38,6 +41,7 @@ show_edges = True
 show_flight = False
 show_isosurfaces = False
 show_opacity = False
+show_picking = False
 show_smooth = False
 threshold = min_threshold = 0.2
 isosurfaces = 200
@@ -47,11 +51,22 @@ passband = 0.1
 flight_level = 0
 
 
-class GeocodeDummy:
-    def __init__(self, address, longitude,latitude):
-        self.address = address
-        self.longitude = longitude
-        self.latitude = latitude
+@dataclass
+class Geocode:
+    longitude: float
+    latitude: float
+    address: str | None = None
+
+
+def latlon(latitude:float, longitude:float) -> str:
+    yunit = "N" if latitude > 0 else "" if latitude == 0 else "S"
+
+    xunit = ""
+    longitude = wrap(longitude)[0]
+    if longitude not in (0, -180):
+        xunit = "W" if longitude < 0 else "E"
+
+    return f"{abs(latitude):.2f}" + r'$\degree$' + f"{yunit} {abs(longitude):.2f}" + r'$\degree$' + f"{xunit}"
 
 
 def rgba(r, g, b):
@@ -105,8 +120,12 @@ def callback_isosurfaces(value) -> None:
 
 def callback_iterations(value) -> None:
     global iterations
+    global p
 
     iterations = int(f"{value:.0f}")
+
+    p.remove_actor(PICKED_REPRESENTATION_NAMES["element"])
+
     callback_render(None)
 
 
@@ -147,15 +166,23 @@ def callback_min(min_value: float) -> None:
 
 def callback_passband(value) -> None:
     global passband
+    global p
 
     passband = float(f"{value:.2f}")
+
+    p.remove_actor(PICKED_REPRESENTATION_NAMES["element"])
+
     callback_render(None)
 
 
 def callback_threshold(value) -> None:
     global threshold
+    global p
 
     threshold = value
+
+    p.remove_actor(PICKED_REPRESENTATION_NAMES["element"])
+
     callback_render(None)
 
 
@@ -176,6 +203,8 @@ def checkbox_clip(flag: bool) -> None:
     global actor_checkbox_edges
     global actor_checkbox_flight
     global actor_flight
+    global actor_checkbox_picking
+    global p
 
     show_clip = bool(flag)
 
@@ -184,6 +213,7 @@ def checkbox_clip(flag: bool) -> None:
         actor_checkbox_smooth.GetRepresentation().SetState(0)
         actor_checkbox_edges.GetRepresentation().SetState(1)
         actor_checkbox_flight.GetRepresentation().SetState(0)
+        actor_checkbox_picking.GetRepresentation().SetState(0)
 
         show_isosurfaces = False
         show_smooth = False
@@ -199,6 +229,8 @@ def checkbox_clip(flag: bool) -> None:
         actor_flight.GetRepresentation().SetVisibility(False)
     else:
         actor_threshold.GetRepresentation().SetVisibility(True)
+
+    checkbox_picking(False)
 
     callback_render(None)
 
@@ -248,12 +280,14 @@ def checkbox_isosurfaces(flag: bool) -> None:
     global show_clip
     global show_smooth
     global show_flight
+    global show_picking
     global actor_isosurfaces
     global actor_threshold
     global actor_min
     global actor_max
     global actor_checkbox_isosurface
     global actor_checkbox_flight
+    global actor_checkbox_picking
 
     if show_clip:
         show_isosurfaces = False
@@ -275,6 +309,8 @@ def checkbox_isosurfaces(flag: bool) -> None:
             show_flight = False
             actor_checkbox_flight.GetRepresentation().SetState(0)
             actor_flight.GetRepresentation().SetVisibility(False)
+            actor_checkbox_picking.GetRepresentation().SetState(0)
+            checkbox_picking(False)
         callback_render(None)
 
 
@@ -293,6 +329,61 @@ def checkbox_opacity(flag: bool) -> None:
         actor_base.GetProperty().SetOpacity(1.0)
 
 
+def checkbox_picking(flag: bool) -> None:
+    global show_clip
+    global show_isosurfaces
+    global show_picking
+    global p
+    global actor_hud
+    global feet
+    global meter
+    global n_hcells
+
+    def picking_callback(pick) -> None:
+        global p
+        global actor_hud
+        global n_hcells
+
+        # for name in p.actors.keys():
+        #     if name.startswith("vtkOpenGLActor"):
+        #         p.remove_actor(name)
+        #         break
+
+        xyz = pick.cell_centers().points[0]
+        radius = np.linalg.norm(xyz)
+        lon, lat = to_lonlat(xyz, radius=radius)
+        location = latlon(lat, lon)
+
+        sample = pick["data"][0]
+
+        flight_level = pick["idx"][0] // n_hcells
+        lower = int(feet.convert(flight_level*50*100, meter))
+        upper = int(feet.convert((flight_level+1)*50*100, meter))
+
+        hud = f"{location}, {lower:,}-{upper:,}m [FL: {flight_level*50:,}-{(flight_level+1)*50:,}], " + f"{sample:.2f}" + r"mg m$^{\text{-3}}$"
+        actor_hud.SetText(0, f"{hud}")
+
+    if show_clip or show_isosurfaces:
+        show_picking = False
+        actor_checkbox_picking.GetRepresentation().SetState(0)
+    else:
+        show_picking = bool(flag)
+
+    if show_picking:
+        p.enable_element_picking(
+            callback=picking_callback,
+            left_clicking=False,
+            show_message=False,
+            line_width=10,
+            render_lines_as_tubes=True,
+        )
+    else:
+        # TODO: remove the picking actor
+        p.disable_picking()
+        p.remove_actor(PICKED_REPRESENTATION_NAMES["element"])
+        actor_hud.SetText(0, "")
+
+
 def checkbox_smooth(flag: bool) -> None:
     global show_smooth
     global show_clip
@@ -301,6 +392,9 @@ def checkbox_smooth(flag: bool) -> None:
     global actor_passband
     global actor_threshold
     global actor_checkbox_smooth
+    global p
+
+    p.remove_actor(PICKED_REPRESENTATION_NAMES["element"])
 
     if show_clip:
         show_smooth = False
@@ -358,6 +452,7 @@ def callback_render(value) -> None:
         value = tstep
     else:
         reset_clip = True
+        p.remove_actor(PICKED_REPRESENTATION_NAMES["element"])
 
     value = int(f"{value:.0f}")
     tstep = value % n_tsteps
@@ -398,6 +493,7 @@ def callback_render(value) -> None:
                 cmap=cmap,
                 clim=clim,
                 show_scalar_bar=False,
+                pickable=False,
             )
         else:
             opacity = None
@@ -442,10 +538,11 @@ def callback_render(value) -> None:
                         render=False,
                         reset_camera=False,
                         render_lines_as_tubes=True,
+                        pickable=False,
                     )
                     lower = int(feet.convert(flight_level*50*100, meter))
                     upper = int(feet.convert((flight_level+1)*50*100, meter))
-                    text = f"{title}\t\tAltitude: {lower:>6,} - {upper:>6,}m (AMSL)\t\tFlight Level: {flight_level*50:,} - {(flight_level+1)*50:,}"
+                    text = f"{title}\tAlt: {lower:,}-{upper:,}m (AMSL)\t\tFL: {flight_level*50:,}-{(flight_level+1)*50:,}"
                     actor_title.SetInput(text)
                 else:
                     p.remove_actor("flight")
@@ -468,6 +565,7 @@ def callback_render(value) -> None:
                 opacity=opacity,
                 smooth_shading=smooth_shading,
                 show_scalar_bar=show_scalar_bar,
+                pickable=True,
             )
 
             if not show_isosurfaces:
@@ -550,46 +648,51 @@ actor_plume = p.add_mesh(
     show_edges=show_edges,
     edge_color="gray",
     annotations=annotations,
+    pickable=True,
 )
 p.view_poi()
 actor_scalar = p.add_scalar_bar(mapper=actor_plume.mapper, **sargs)
 
 try:
     geolocator = Nominatim(user_agent="geovista")
-    location = geolocator.geocode("Raikoke", language="en")
+    raikoke = geolocator.geocode("Raikoke", language="en")
 except GeocoderUnavailable:
-    print("Error: Geocoder Unavailable - possibly due to poor connection")
-    location = GeocodeDummy(address = "No address avilable (Geocode error)", latitude=153.25, longitude=48.292)
-
-raikoke = GeocodeDummy(address=location.address, latitude=48.292, longitude=153.25)
+    raikoke = Geocode(longitude=153.25, latitude=48.292)
 
 p.add_points(
     xs=raikoke.longitude,
     ys=raikoke.latitude,
     render_points_as_spheres=True,
     color="yellow",
-    point_size=10
+    point_size=10,
+    pickable=False,
 )
-actor_base = p.add_base_layer(texture=geovista.blue_marble(), zlevel=0, resolution="c192")
-p.add_coastlines(color="lightgray")
+actor_base = p.add_base_layer(
+    texture=geovista.blue_marble(),
+    zlevel=0,
+    resolution="c192",
+    pickable=False
+)
+p.add_coastlines(color="lightgray", pickable=False)
 p.add_axes(color=color)
 
 # Defining Raikoke Legend
 fname = BASE_DIR / "images" / "raikoke_inset.png"
 p.add_logo_widget(fname, position=(0.00, 0.91), size=(0.08, 0.08))
 
-title = f"Raikoke: {raikoke.latitude}" + r'$\degree$N' + f" {raikoke.longitude}" + r'$\degree$E'
+title = f"Raikoke: {latlon(raikoke.latitude, raikoke.longitude)}"
 actor_title = p.add_text(
     title,
-    position=(0.08,0.96),
+    position=(0.08, 0.96),
     viewport=True,
     font_size=15,
     color=color,
 )
 
+address = f'{", ".join([word.strip() for word in raikoke.address.split(",")[1:]])}\n' if raikoke.address else ""
 p.add_text(
-    f"{raikoke.address[9:]} \nVertical Scale Factor: x{zscale:.2f}",
-    position=(0.08,0.91),
+    f"{address}Vertical Scale Factor: x{zscale:.2f}",
+    position=(0.08, 0.91),
     viewport=True,
     font_size=10,
     color=color,
@@ -597,6 +700,13 @@ p.add_text(
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
 actor = p.add_text(text, position="upper_right", font_size=15, color=color, shadow=False)
+
+actor_hud = p.add_text(
+    "",
+    position="lower_left",
+    font_size=8,
+    color="white",
+)
 
 #
 # sliders
@@ -747,6 +857,23 @@ actor_checkbox_smooth = p.add_checkbox_button_widget(
 )
 p.add_text(
     "Smooth",
+    position=(x + size + offset, y),
+    font_size=font_size,
+    color=color,
+)
+
+y += size + pad
+
+actor_checkbox_picking = p.add_checkbox_button_widget(
+    checkbox_picking,
+    value=show_picking,
+    color_on="green",
+    color_off="red",
+    size=size,
+    position=(x, y),
+)
+p.add_text(
+    "Picking",
     position=(x + size + offset, y),
     font_size=font_size,
     color=color,
