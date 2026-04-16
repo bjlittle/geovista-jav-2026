@@ -39,6 +39,7 @@ reset_clip = False
 show_clip = False
 show_edges = True
 show_flight = False
+show_graticule = False
 show_isosurfaces = False
 show_opacity = False
 show_picking = False
@@ -273,6 +274,19 @@ def checkbox_flight(flag: bool) -> None:
             state = False
         actor_threshold.GetRepresentation().SetVisibility(state)
         callback_render(None)
+
+
+def checkbox_graticule(flag: bool) -> None:
+    global p
+
+    actors = [name for name in p.actors.keys() if name.startswith("meridian") or name.startswith("parallel")]
+    flag = bool(flag)
+
+    if flag and not actors:
+        p.add_graticule(lat_step=15, lon_step=30, mesh_args={"zlevel": 0, "reset_camera": False})
+
+    for actor in actors:
+        p.actors[actor].SetVisibility(flag)
 
 
 def checkbox_isosurfaces(flag: bool) -> None:
@@ -908,6 +922,23 @@ actor_checkbox_isosurface = p.add_checkbox_button_widget(
 )
 p.add_text(
     "Isosurfaces",
+    position=(x + size + offset, y),
+    font_size=font_size,
+    color=color,
+)
+
+y += size + pad
+
+actor_checkbox_edges = p.add_checkbox_button_widget(
+    checkbox_graticule,
+    value=show_graticule,
+    color_on="green",
+    color_off="red",
+    size=size,
+    position=(x, y),
+)
+p.add_text(
+    "Graticule",
     position=(x + size + offset, y),
     font_size=font_size,
     color=color,
