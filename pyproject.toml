@@ -101,7 +101,7 @@ cmocean = ">=4.0.3,<5"
 colorcet = ">=3.1.0,<4"
 geopy = ">=2.4.0,<3"
 iris = ">=3.14.0,<4"
-lazy_loader = ">=0.4.0,<0.5"
+lazy-loader = ">=0.4.0,<0.6"
 netcdf4 = ">=1.7.2,<2"
 numpy = ">=2.2.6,<3"
 platformdirs = ">=4.3.8,<5"
@@ -117,7 +117,7 @@ setuptools-scm = ">=8.3.1,<9"
 [tool.pixi.feature.devs.dependencies]
 check-manifest = ">=0.51,<0.52"
 pre-commit = ">=4.2.0,<5"
-ruff = ">=0.12.0,<0.15"
+ruff = ">=0.12.0,<0.16"
 zizmor = ">=1.9.0,<2"
 
 [tool.pixi.feature.devs.pypi-dependencies]
