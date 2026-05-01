@@ -1,4 +1,4 @@
-check-manifest >=0.51,<0.52
-pre-commit >=4.5.1,<4.6
-ruff >=0.15.10,<0.16
-zizmor >=1.24.1,<1.25
+check-manifest <0.52
+pre-commit <4.7
+ruff <0.16
+zizmor <1.25
