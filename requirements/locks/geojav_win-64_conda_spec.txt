@@ -140,7 +140,7 @@ https://conda.anaconda.org/conda-forge/win-64/svt-av1-4.0.1-hac47afa_0.conda#d97
 https://conda.anaconda.org/conda-forge/win-64/glslang-16.2.0-h5b34520_0.conda#b3c42da233547957551b5327ec403007
 https://conda.anaconda.org/conda-forge/win-64/shaderc-2025.5-haa9a63f_0.conda#c7159a672b77c38a0e8f88491ca9e9b2
 https://conda.anaconda.org/conda-forge/win-64/libusb-1.0.29-h1839187_0.conda#a656b2c367405cd24988cf67ff2675aa
-https://conda.anaconda.org/conda-forge/win-64/sdl3-3.4.4-h5112557_0.conda#05285893e00e5097c99fbf89cc7bc75e
+https://conda.anaconda.org/conda-forge/win-64/sdl3-3.4.8-h5112557_0.conda#5c522addb155244acb89ab8ca8e3d9f9
 https://conda.anaconda.org/conda-forge/win-64/sdl2-2.32.56-h5112557_0.conda#4cffbfebb6614a1bff3fc666527c25c7
 https://conda.anaconda.org/conda-forge/win-64/openh264-2.6.0-hb17fa0b_0.conda#ad4cac6ceb9e4c8e01802e3f15e87bb2
 https://conda.anaconda.org/conda-forge/win-64/libvorbis-1.3.7-h5112557_2.conda#42a8a56c60882da5d451aa95b8455111
