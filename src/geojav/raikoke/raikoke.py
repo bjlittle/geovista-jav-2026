@@ -67,7 +67,7 @@ def latlon(latitude:float, longitude:float) -> str:
     if longitude not in (0, -180):
         xunit = "W" if longitude < 0 else "E"
 
-    return f"{abs(latitude):.2f}" + r'$\degree$' + f"{yunit} {abs(longitude):.2f}" + r'$\degree$' + f"{xunit}"
+    return f"{abs(latitude):.3f}" + r'$\degree$' + f"{yunit} {abs(longitude):.3f}" + r'$\degree$' + f"{xunit}"
 
 
 def rgba(r, g, b):
@@ -352,18 +352,33 @@ def checkbox_picking(flag: bool) -> None:
     global feet
     global meter
     global n_hcells
+    global feet
+    global meter
+    global n_hcells
+    global frame
 
     def picking_callback(pick) -> None:
         global p
         global actor_hud
         global n_hcells
-
+        global frame
         # for name in p.actors.keys():
         #     if name.startswith("vtkOpenGLActor"):
         #         p.remove_actor(name)
         #         break
+        cell_idx = pick["idx"][0]
 
         xyz = pick.cell_centers().points[0]
+        idx = frame["idx"]
+        cell_index = np.where(idx==cell_idx)
+        #print(f"Cell ID: {cell_id}")
+
+        cell = frame.extract_cells(cell_index)
+
+        p.add_mesh(cell, style="wireframe",pickable=False, color="white", line_width=5, render_lines_as_tubes=True, name="picked")
+
+
+        xyz = cell.cell_centers().points[0]
         radius = np.linalg.norm(xyz)
         lon, lat = to_lonlat(xyz, radius=radius)
         location = latlon(lat, lon)
@@ -371,6 +386,7 @@ def checkbox_picking(flag: bool) -> None:
         sample = pick["data"][0]
 
         flight_level = pick["idx"][0] // n_hcells
+        flight_level = cell_idx // n_hcells
         lower = int(feet.convert(flight_level*50*100, meter))
         upper = int(feet.convert((flight_level+1)*50*100, meter))
 
@@ -395,6 +411,7 @@ def checkbox_picking(flag: bool) -> None:
         # TODO: remove the picking actor
         p.disable_picking()
         p.remove_actor(PICKED_REPRESENTATION_NAMES["element"])
+        p.remove_actor("picked")
         actor_hud.SetText(0, "")
 
 
@@ -460,6 +477,7 @@ def callback_render(value) -> None:
     global actor_title
     global feet
     global meter
+    global frame
 
 
     if value is None:
@@ -467,6 +485,7 @@ def callback_render(value) -> None:
     else:
         reset_clip = True
         p.remove_actor(PICKED_REPRESENTATION_NAMES["element"])
+        p.remove_actor("picked")
 
     value = int(f"{value:.0f}")
     tstep = value % n_tsteps
