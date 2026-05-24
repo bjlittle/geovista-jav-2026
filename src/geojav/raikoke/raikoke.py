@@ -14,7 +14,7 @@ from geovista.common import to_cartesian, to_lonlat, wrap
 from geovista.pantry.data import capitalise
 from geovista.crs import to_wkt, WGS84
 from geovista.qt import GeoBackgroundPlotter
-from geovista.geodesic import line
+from geovista.themes import restore_plot_theme
 import iris
 import netCDF4 as nc
 import numpy as np
@@ -630,6 +630,8 @@ cmap = qva(*clim)
 color = "white"
 
 frame = cache(mesh, data, tstep)
+
+_ = restore_plot_theme()
 
 p = GeoBackgroundPlotter()
 p.set_background(color="black")
