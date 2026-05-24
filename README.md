@@ -19,8 +19,6 @@
 
 ----
 
-<p align="center">🚧 Under construction 🚧</p>
-
 |              |   |
 |--------------|---|
 | ⚙️ CI         | [![ci-locks](https://github.com/bjlittle/geovista-jav-2026/actions/workflows/ci-locks.yml/badge.svg)](https://github.com/bjlittle/geovista-jav-2026/actions/workflows/ci-locks.yml) [![ci-manifest](https://github.com/bjlittle/geovista-jav-2026/actions/workflows/ci-manifest.yml/badge.svg)](https://github.com/bjlittle/geovista-jav-2026/actions/workflows/ci-manifest.yml) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bjlittle/geovista-jav-2026/main.svg)](https://results.pre-commit.ci/latest/github/bjlittle/geovista-jav-2026/main)  |
