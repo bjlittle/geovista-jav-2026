@@ -1002,7 +1002,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/wslink-2.5.7-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.0-pyhcf101f3_0.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -1240,7 +1240,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -1469,7 +1469,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
   devs-py313:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -1764,7 +1764,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/wslink-2.5.7-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.0-pyhcf101f3_0.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -2001,7 +2001,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -2229,7 +2229,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
   geojav:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -2524,7 +2524,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/wslink-2.5.7-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.0-pyhcf101f3_0.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -2761,7 +2761,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -2989,7 +2989,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
   geojav-py312:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -3286,7 +3286,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/wslink-2.5.7-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.0-pyhcf101f3_0.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -3524,7 +3524,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -3753,7 +3753,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
   geojav-py313:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -4048,7 +4048,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/wslink-2.5.7-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.0-pyhcf101f3_0.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -4285,7 +4285,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.2-pyhd8ed1ab_0.conda
@@ -4513,7 +4513,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: .
-      - pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+      - pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
   py312:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -6001,7 +6001,7 @@ packages:
   - python_abi 3.12.* *_cp312
   license: BSD-3-Clause AND MIT AND EPL-2.0
   purls:
-  - pkg:pypi/backports-zstd?source=compressed-mapping
+  - pkg:pypi/backports-zstd?source=hash-mapping
   size: 239928
   timestamp: 1778594049826
 - conda: https://conda.anaconda.org/conda-forge/linux-64/backports.zstd-1.5.0-py313h18e8e13_0.conda
@@ -6408,6 +6408,7 @@ packages:
   - libuuid >=2.42.1,<3.0a0
   - libzlib >=1.3.2,<2.0a0
   license: MIT
+  license_family: MIT
   purls: []
   size: 280882
   timestamp: 1779421631622
@@ -6425,7 +6426,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=compressed-mapping
+  - pkg:pypi/fonttools?source=hash-mapping
   size: 3007892
   timestamp: 1778770568019
 - conda: https://conda.anaconda.org/conda-forge/linux-64/fonttools-4.63.0-py313h3dea7bd_0.conda
@@ -8733,6 +8734,7 @@ packages:
   constrains:
   - __glibc >=2.17
   license: MIT
+  license_family: MIT
   purls:
   - pkg:pypi/ruff?source=compressed-mapping
   size: 9340598
@@ -9462,7 +9464,7 @@ packages:
   license: Apache-2.0
   license_family: Apache
   purls:
-  - pkg:pypi/yarl?source=compressed-mapping
+  - pkg:pypi/yarl?source=hash-mapping
   size: 155061
   timestamp: 1779246264888
 - conda: https://conda.anaconda.org/conda-forge/linux-64/yarl-1.24.2-py313h3dea7bd_0.conda
@@ -9788,6 +9790,7 @@ packages:
   - tomli >=2.0.0
   - python
   license: Apache-2.0
+  license_family: APACHE
   purls:
   - pkg:pypi/cyclopts?source=compressed-mapping
   size: 172588
@@ -10730,7 +10733,7 @@ packages:
   - zstd >=1.5.7,<1.6.0a0
   license: BSD-3-Clause AND MIT AND EPL-2.0
   purls:
-  - pkg:pypi/backports-zstd?source=compressed-mapping
+  - pkg:pypi/backports-zstd?source=hash-mapping
   size: 240621
   timestamp: 1778594129022
 - conda: https://conda.anaconda.org/conda-forge/osx-64/backports.zstd-1.5.0-py313h116f8bd_0.conda
@@ -11092,6 +11095,7 @@ packages:
   - libintl >=0.25.1,<1.0a0
   - libzlib >=1.3.2,<2.0a0
   license: MIT
+  license_family: MIT
   purls: []
   size: 248393
   timestamp: 1779422794264
@@ -11123,7 +11127,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/fonttools?source=compressed-mapping
+  - pkg:pypi/fonttools?source=hash-mapping
   size: 2929481
   timestamp: 1778771095250
 - conda: https://conda.anaconda.org/conda-forge/osx-64/freetype-2.14.3-h694c41f_0.conda
@@ -12323,7 +12327,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=compressed-mapping
+  - pkg:pypi/numpy?source=hash-mapping
   size: 8068573
   timestamp: 1779169285266
 - conda: https://conda.anaconda.org/conda-forge/osx-64/openjpeg-2.5.4-h52bb76a_0.conda
@@ -12841,6 +12845,7 @@ packages:
   constrains:
   - __osx >=10.13
   license: MIT
+  license_family: MIT
   purls:
   - pkg:pypi/ruff?source=compressed-mapping
   size: 9327846
@@ -13392,7 +13397,7 @@ packages:
   - python_abi 3.13.* *_cp313
   license: BSD-3-Clause AND MIT AND EPL-2.0
   purls:
-  - pkg:pypi/backports-zstd?source=compressed-mapping
+  - pkg:pypi/backports-zstd?source=hash-mapping
   size: 242051
   timestamp: 1778594078865
 - conda: https://conda.anaconda.org/conda-forge/win-64/blosc-1.21.6-hfd34d9b_1.conda
@@ -13747,6 +13752,7 @@ packages:
   - vc >=14.3,<15
   - vc14_runtime >=14.44.35208
   license: MIT
+  license_family: MIT
   purls: []
   size: 201700
   timestamp: 1779421777219
@@ -15497,6 +15503,7 @@ packages:
   - vc14_runtime >=14.44.35208
   - ucrt >=10.0.20348.0
   license: MIT
+  license_family: MIT
   purls:
   - pkg:pypi/ruff?source=compressed-mapping
   size: 9779650
@@ -16073,9 +16080,9 @@ packages:
   - ruff<0.16 ; extra == 'devs'
   - zizmor<1.26 ; extra == 'devs'
   requires_python: '>=3.12'
-- pypi: git+https://github.com/bjlittle/geovista?branch=main#8ef89bacf4fd4aa63488d1bf3c6f26b89650b900
+- pypi: git+https://github.com/bjlittle/geovista?branch=main#fcb36880d1c7d129f87dce9ad6ffd84c72ee48b0
   name: geovista
-  version: 0.6.0.dev1004
+  version: 0.6.0.dev1005
   requires_dist:
   - cartopy<0.26
   - click<8.5
