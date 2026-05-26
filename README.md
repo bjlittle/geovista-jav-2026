@@ -53,7 +53,7 @@ Make a local clone of the `geovista-jav-2026` repository:
 
 Create an environment to install `geojav` and all its required dependencies.
 
-### `pixi`
+### `pixi` 🧚
 
 We recommend using [pixi](https://github.com/prefix-dev/pixi) for package management.
 
