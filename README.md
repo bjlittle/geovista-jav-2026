@@ -63,7 +63,7 @@ Simply:
 > pixi shell --environment geojav
 ```
 
-Alternatively, install [direnv](https://direnv.net/) to *activate*/*deactivate*
+Additionally, install [direnv](https://direnv.net/) to *activate*/*deactivate*
 the `geojav` environment *automatically* whenever you enter/leave the `geovista-jav-2026`
 directory:
 
