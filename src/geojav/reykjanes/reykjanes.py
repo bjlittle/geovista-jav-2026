@@ -62,8 +62,6 @@ def cache(mesh, data, tstep) -> pv.UnstructuredGrid:
     else:
         result = pv.read(fname)
 
-    print(f"min={result['data'].min():,.02f}, max={result['data'].max():,.02f}")
-
     return result
 
 
@@ -323,8 +321,8 @@ def callback_render(value) -> None:
         p.remove_actor("plume")
     else:
         if reset_clip:
-            if p.plane_widgets:
-                p.plane_widgets.pop().Off()
+            if p.widgets.plane_widgets:
+                p.widgets.plane_widgets.pop().Off()
 
         if show_clip:
             xyz = np.asarray(frame.center)
@@ -355,8 +353,8 @@ def callback_render(value) -> None:
             tshow_edges = show_edges
             show_scalar_bar = False
 
-            if p.plane_widgets:
-                p.plane_widgets.pop().Off()
+            if p.widgets.plane_widgets:
+                p.widgets.plane_widgets.pop().Off()
                 p.remove_actor("plume_clip")
 
             if show_smooth:
