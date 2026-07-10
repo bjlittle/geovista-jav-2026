@@ -13,5 +13,5 @@ pykdtree <1.5
 pyproj <3.8
 PyQt5 <5.16
 pyvista >=0.48.0,<0.49
-pyvistaqt <0.12
+pyvistaqt <0.13
 scitools-iris <3.16
