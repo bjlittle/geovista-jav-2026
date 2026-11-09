@@ -82,7 +82,7 @@ directory:
 
 ### `conda`
 
-Simply:
+From the geovista-jav-2026 directory simply run:
 
 ```bash
 > conda env create --file requirements/geojav.yml
