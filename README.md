@@ -82,7 +82,7 @@ directory:
 
 ### `conda`
 
-Simply:
+From the geovista-jav-2026 directory simply run:
 
 ```bash
 > conda env create --file requirements/geojav.yml
@@ -130,13 +130,14 @@ If you wish to interactvely explore either of the **Raikoke** and **Reykjanes** 
          style="width: 75%; height: 75%"></a>
 </p>
 
-### Quick Start
+### Quick Start (via Pixi only)
 
 To download, unpack, preprocess and render the Raikoke dataset, simply:
 
 ```bash
 > pixi run --frozen raikoke
 ```
+For other routes, including conda and pip, follow the instructions [here](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/raikoke/README.md)
 
 ## Reykjanes (Iceland)
 
@@ -147,13 +148,14 @@ To download, unpack, preprocess and render the Raikoke dataset, simply:
          style="width: 75%; height: 75%"></a>
 </p>
 
-### Quick Start
+### Quick Start (via Pixi only)
 
 To download, unpack, preprocess and render the Reykjanes dataset, simply:
 
 ```bash
 > pixi run --frozen reykjanes
 ```
+For other routes, including conda and pip, follow the instructions [here](https://github.com/bjlittle/geovista-jav-2026/blob/main/src/geojav/reykjanes/README.md)
 
 
 # [#ShowYourStripes](https://showyourstripes.info/s/globe)
