@@ -31,5 +31,5 @@ dependencies:
 - setuptools-scm >=8.3.1,<9
 - pip
 - pip:
-  - -e .
+  - -e ..
   - geovista @ git+https://github.com/bjlittle/geovista.git@main

@@ -6,7 +6,7 @@ QVA_grid1_*.txt
 assets/
 *.nc
 *.vtk
-
+!src/geojav/sample/reykjanes_043.vtk
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

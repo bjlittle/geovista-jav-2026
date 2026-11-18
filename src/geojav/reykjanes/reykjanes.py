@@ -398,7 +398,7 @@ def callback_render(value) -> None:
                 p.remove_actor("plume")
 
     reset_clip = False
-    actor.SetText(0, unit.num2date(t.points[tstep]).strftime(fmt))
+    actor.SetText(3, unit.num2date(t.points[tstep]).strftime(fmt))
 
 
 # sort the assets in date ascending date order
@@ -452,7 +452,7 @@ frame = cache(mesh, data, tstep)
 
 _ = restore_plot_theme()
 
-p = GeoBackgroundPlotter()
+p = GeoBackgroundPlotter(toolbar=False, menu_bar=False,title="geojav-2026", border=False)
 p.set_background(color="black")
 
 sargs = {
@@ -484,11 +484,11 @@ location = GeocodeDummy(address="Reykjanes Peninsula, Iceland", longitude=-1*flo
 p.add_points(xs=location.longitude, ys=location.latitude, render_points_as_spheres=True, color="orange", point_size=10, reset_camera=False)
 actor_base = p.add_base_layer(texture=geovista.blue_marble(), zlevel=0, resolution="c192")
 p.add_coastlines(color="lightgray", zlevel=0, reset_camera=False)
-p.add_axes(color=color)
+#p.add_axes(color=color)
 
 
 text = unit.num2date(t.points[tstep]).strftime(fmt)
-actor = p.add_text(text, position="lower_left", font_size=15, color=color, shadow=False)
+actor = p.add_text(text, position="upper_right", font_size=15, color=color, shadow=False)
 
 fname = BASE_DIR / "images" / "reykjanes_inset.png"
 p.add_logo_widget(fname, position=(0.00, 0.91), size=(0.08, 0.08))
@@ -517,7 +517,7 @@ p.add_slider_widget(
 
 actor_threshold = p.add_slider_widget(
     callback_threshold,
-    (0.1, 500.0),
+    (0.0, 500.0),
     value=threshold,
     pointa=(0.55, 0.80),
     pointb=(0.90, 0.80),

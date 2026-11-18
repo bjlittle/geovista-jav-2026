@@ -658,7 +658,7 @@ frame = cache(mesh, data, tstep)
 
 _ = restore_plot_theme()
 
-p = GeoBackgroundPlotter()
+p = GeoBackgroundPlotter(toolbar=False, menu_bar=False,title="geojav-2026", border=False)
 p.set_background(color="black")
 
 sargs = {
