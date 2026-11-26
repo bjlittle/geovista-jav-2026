@@ -7,11 +7,11 @@ geopy <2.6
 lazy-loader <0.7
 netCDF4 <1.8
 numpy >=2.2.6,<2.6
-platformdirs <4.14
+platformdirs <4.15
 pooch <1.10
 pykdtree <1.5
 pyproj <3.9
 PyQt5 <5.16
 pyvista >=0.48.0,<0.50
-pyvistaqt <0.14
+pyvistaqt <0.15
 scitools-iris <3.17
